@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.marathon.manage.mapper.MarathonMediaActivityMapper" >
+  <resultMap id="BaseResultMap" type="com.marathon.manage.pojo.MarathonMediaActivity" >
+    <id column="media_activity_uuid" property="mediaActivityUuid" jdbcType="VARCHAR" />
+    <result column="marathon_uuid" property="marathonUuid" jdbcType="VARCHAR" />
+    <result column="media_activity_type" property="mediaActivityType" jdbcType="VARCHAR" />
+    <result column="media_activity_name" property="mediaActivityName" jdbcType="VARCHAR" />
+    <result column="media_activity_starttime" property="mediaActivityStarttime" jdbcType="TIMESTAMP" />
+    <result column="media_activity_endtime" property="mediaActivityEndtime" jdbcType="TIMESTAMP" />
+    <result column="media_activity_director" property="mediaActivityDirector" jdbcType="VARCHAR" />
+    <result column="media_activity_cost" property="mediaActivityCost" jdbcType="VARCHAR" />
+    <result column="media_activity_status" property="mediaActivityStatus" jdbcType="VARCHAR" />
+    <result column="media_activity_progress" property="mediaActivityProgress" jdbcType="VARCHAR" />
+    <result column="media_activity_creator" property="mediaActivityCreator" jdbcType="VARCHAR" />
+    <result column="media_activity_createtime" property="mediaActivityCreatetime" jdbcType="TIMESTAMP" />
+    <result column="media_activity_updater" property="mediaActivityUpdater" jdbcType="VARCHAR" />
+    <result column="media_activity_updatetime" property="mediaActivityUpdatetime" jdbcType="TIMESTAMP" />
+    <result column="media_activity_deleted" property="mediaActivityDeleted" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    media_activity_uuid, marathon_uuid, media_activity_type, media_activity_name, media_activity_starttime, 
+    media_activity_endtime, media_activity_director, media_activity_cost, media_activity_status, 
+    media_activity_progress, media_activity_creator, media_activity_createtime, media_activity_updater, 
+    media_activity_updatetime, media_activity_deleted
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from marathon_media_activity
+    where media_activity_uuid = #{mediaActivityUuid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from marathon_media_activity
+    where media_activity_uuid = #{mediaActivityUuid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.marathon.manager.pojo.MarathonMediaActivity" >
+    insert into marathon_media_activity (media_activity_uuid, marathon_uuid, 
+      media_activity_type, media_activity_name, media_activity_starttime, 
+      media_activity_endtime, media_activity_director, 
+      media_activity_cost, media_activity_status, 
+      media_activity_progress, media_activity_creator, 
+      media_activity_createtime, media_activity_updater, 
+      media_activity_updatetime, media_activity_deleted
+      )
+    values (#{mediaActivityUuid,jdbcType=VARCHAR}, #{marathonUuid,jdbcType=VARCHAR}, 
+      #{mediaActivityType,jdbcType=VARCHAR}, #{mediaActivityName,jdbcType=VARCHAR}, #{mediaActivityStarttime,jdbcType=TIMESTAMP}, 
+      #{mediaActivityEndtime,jdbcType=TIMESTAMP}, #{mediaActivityDirector,jdbcType=VARCHAR}, 
+      #{mediaActivityCost,jdbcType=VARCHAR}, #{mediaActivityStatus,jdbcType=VARCHAR}, 
+      #{mediaActivityProgress,jdbcType=VARCHAR}, #{mediaActivityCreator,jdbcType=VARCHAR}, 
+      #{mediaActivityCreatetime,jdbcType=TIMESTAMP}, #{mediaActivityUpdater,jdbcType=VARCHAR}, 
+      #{mediaActivityUpdatetime,jdbcType=TIMESTAMP}, #{mediaActivityDeleted,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.marathon.manager.pojo.MarathonMediaActivity" >
+    insert into marathon_media_activity
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mediaActivityUuid != null" >
+        media_activity_uuid,
+      </if>
+      <if test="marathonUuid != null" >
+        marathon_uuid,
+      </if>
+      <if test="mediaActivityType != null" >
+        media_activity_type,
+      </if>
+      <if test="mediaActivityName != null" >
+        media_activity_name,
+      </if>
+      <if test="mediaActivityStarttime != null" >
+        media_activity_starttime,
+      </if>
+      <if test="mediaActivityEndtime != null" >
+        media_activity_endtime,
+      </if>
+      <if test="mediaActivityDirector != null" >
+        media_activity_director,
+      </if>
+      <if test="mediaActivityCost != null" >
+        media_activity_cost,
+      </if>
+      <if test="mediaActivityStatus != null" >
+        media_activity_status,
+      </if>
+      <if test="mediaActivityProgress != null" >
+        media_activity_progress,
+      </if>
+      <if test="mediaActivityCreator != null" >
+        media_activity_creator,
+      </if>
+      <if test="mediaActivityCreatetime != null" >
+        media_activity_createtime,
+      </if>
+      <if test="mediaActivityUpdater != null" >
+        media_activity_updater,
+      </if>
+      <if test="mediaActivityUpdatetime != null" >
+        media_activity_updatetime,
+      </if>
+      <if test="mediaActivityDeleted != null" >
+        media_activity_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mediaActivityUuid != null" >
+        #{mediaActivityUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="marathonUuid != null" >
+        #{marathonUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityType != null" >
+        #{mediaActivityType,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityName != null" >
+        #{mediaActivityName,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityStarttime != null" >
+        #{mediaActivityStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mediaActivityEndtime != null" >
+        #{mediaActivityEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mediaActivityDirector != null" >
+        #{mediaActivityDirector,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityCost != null" >
+        #{mediaActivityCost,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityStatus != null" >
+        #{mediaActivityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityProgress != null" >
+        #{mediaActivityProgress,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityCreator != null" >
+        #{mediaActivityCreator,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityCreatetime != null" >
+        #{mediaActivityCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mediaActivityUpdater != null" >
+        #{mediaActivityUpdater,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityUpdatetime != null" >
+        #{mediaActivityUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mediaActivityDeleted != null" >
+        #{mediaActivityDeleted,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.marathon.manager.pojo.MarathonMediaActivity" >
+    update marathon_media_activity
+    <set >
+      <if test="marathonUuid != null" >
+        marathon_uuid = #{marathonUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityType != null" >
+        media_activity_type = #{mediaActivityType,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityName != null" >
+        media_activity_name = #{mediaActivityName,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityStarttime != null" >
+        media_activity_starttime = #{mediaActivityStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mediaActivityEndtime != null" >
+        media_activity_endtime = #{mediaActivityEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mediaActivityDirector != null" >
+        media_activity_director = #{mediaActivityDirector,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityCost != null" >
+        media_activity_cost = #{mediaActivityCost,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityStatus != null" >
+        media_activity_status = #{mediaActivityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityProgress != null" >
+        media_activity_progress = #{mediaActivityProgress,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityCreator != null" >
+        media_activity_creator = #{mediaActivityCreator,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityCreatetime != null" >
+        media_activity_createtime = #{mediaActivityCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mediaActivityUpdater != null" >
+        media_activity_updater = #{mediaActivityUpdater,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaActivityUpdatetime != null" >
+        media_activity_updatetime = #{mediaActivityUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mediaActivityDeleted != null" >
+        media_activity_deleted = #{mediaActivityDeleted,jdbcType=TINYINT},
+      </if>
+    </set>
+    where media_activity_uuid = #{mediaActivityUuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.marathon.manager.pojo.MarathonMediaActivity" >
+    update marathon_media_activity
+    set marathon_uuid = #{marathonUuid,jdbcType=VARCHAR},
+      media_activity_type = #{mediaActivityType,jdbcType=VARCHAR},
+      media_activity_name = #{mediaActivityName,jdbcType=VARCHAR},
+      media_activity_starttime = #{mediaActivityStarttime,jdbcType=TIMESTAMP},
+      media_activity_endtime = #{mediaActivityEndtime,jdbcType=TIMESTAMP},
+      media_activity_director = #{mediaActivityDirector,jdbcType=VARCHAR},
+      media_activity_cost = #{mediaActivityCost,jdbcType=VARCHAR},
+      media_activity_status = #{mediaActivityStatus,jdbcType=VARCHAR},
+      media_activity_progress = #{mediaActivityProgress,jdbcType=VARCHAR},
+      media_activity_creator = #{mediaActivityCreator,jdbcType=VARCHAR},
+      media_activity_createtime = #{mediaActivityCreatetime,jdbcType=TIMESTAMP},
+      media_activity_updater = #{mediaActivityUpdater,jdbcType=VARCHAR},
+      media_activity_updatetime = #{mediaActivityUpdatetime,jdbcType=TIMESTAMP},
+      media_activity_deleted = #{mediaActivityDeleted,jdbcType=TINYINT}
+    where media_activity_uuid = #{mediaActivityUuid,jdbcType=VARCHAR}
+  </update>
+</mapper>

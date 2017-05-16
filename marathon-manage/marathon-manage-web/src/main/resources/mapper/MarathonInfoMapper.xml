@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.marathon.manage.mapper.MarathonInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.marathon.manage.pojo.MarathonInfo" >
+    <id column="marathon_uuid" property="marathonUuid" jdbcType="VARCHAR" />
+    <result column="marathon_name" property="marathonName" jdbcType="VARCHAR" />
+    <result column="marathon_starttime" property="marathonStarttime" jdbcType="TIMESTAMP" />
+    <result column="marathon_endtime" property="marathonEndtime" jdbcType="TIMESTAMP" />
+    <result column="marathon_address" property="marathonAddress" jdbcType="VARCHAR" />
+    <result column="marathon_creater" property="marathonCreater" jdbcType="VARCHAR" />
+    <result column="marathon_createtime" property="marathonCreatetime" jdbcType="TIMESTAMP" />
+    <result column="marathon_updater" property="marathonUpdater" jdbcType="VARCHAR" />
+    <result column="marathon_updatetime" property="marathonUpdatetime" jdbcType="TIMESTAMP" />
+    <result column="marathon_deleted" property="marathonDeleted" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    marathon_uuid, marathon_name, marathon_starttime, marathon_endtime, marathon_address, 
+    marathon_creater, marathon_createtime, marathon_updater, marathon_updatetime, marathon_deleted
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from marathon_info
+    where marathon_uuid = #{marathonUuid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from marathon_info
+    where marathon_uuid = #{marathonUuid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.marathon.manager.pojo.MarathonInfo" >
+    insert into marathon_info (marathon_uuid, marathon_name, marathon_starttime, 
+      marathon_endtime, marathon_address, marathon_creater, 
+      marathon_createtime, marathon_updater, 
+      marathon_updatetime, marathon_deleted)
+    values (#{marathonUuid,jdbcType=VARCHAR}, #{marathonName,jdbcType=VARCHAR}, #{marathonStarttime,jdbcType=TIMESTAMP}, 
+      #{marathonEndtime,jdbcType=TIMESTAMP}, #{marathonAddress,jdbcType=VARCHAR}, #{marathonCreater,jdbcType=VARCHAR}, 
+      #{marathonCreatetime,jdbcType=TIMESTAMP}, #{marathonUpdater,jdbcType=VARCHAR}, 
+      #{marathonUpdatetime,jdbcType=TIMESTAMP}, #{marathonDeleted,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.marathon.manager.pojo.MarathonInfo" >
+    insert into marathon_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="marathonUuid != null" >
+        marathon_uuid,
+      </if>
+      <if test="marathonName != null" >
+        marathon_name,
+      </if>
+      <if test="marathonStarttime != null" >
+        marathon_starttime,
+      </if>
+      <if test="marathonEndtime != null" >
+        marathon_endtime,
+      </if>
+      <if test="marathonAddress != null" >
+        marathon_address,
+      </if>
+      <if test="marathonCreater != null" >
+        marathon_creater,
+      </if>
+      <if test="marathonCreatetime != null" >
+        marathon_createtime,
+      </if>
+      <if test="marathonUpdater != null" >
+        marathon_updater,
+      </if>
+      <if test="marathonUpdatetime != null" >
+        marathon_updatetime,
+      </if>
+      <if test="marathonDeleted != null" >
+        marathon_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="marathonUuid != null" >
+        #{marathonUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="marathonName != null" >
+        #{marathonName,jdbcType=VARCHAR},
+      </if>
+      <if test="marathonStarttime != null" >
+        #{marathonStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="marathonEndtime != null" >
+        #{marathonEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="marathonAddress != null" >
+        #{marathonAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="marathonCreater != null" >
+        #{marathonCreater,jdbcType=VARCHAR},
+      </if>
+      <if test="marathonCreatetime != null" >
+        #{marathonCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="marathonUpdater != null" >
+        #{marathonUpdater,jdbcType=VARCHAR},
+      </if>
+      <if test="marathonUpdatetime != null" >
+        #{marathonUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="marathonDeleted != null" >
+        #{marathonDeleted,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.marathon.manager.pojo.MarathonInfo" >
+    update marathon_info
+    <set >
+      <if test="marathonName != null" >
+        marathon_name = #{marathonName,jdbcType=VARCHAR},
+      </if>
+      <if test="marathonStarttime != null" >
+        marathon_starttime = #{marathonStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="marathonEndtime != null" >
+        marathon_endtime = #{marathonEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="marathonAddress != null" >
+        marathon_address = #{marathonAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="marathonCreater != null" >
+        marathon_creater = #{marathonCreater,jdbcType=VARCHAR},
+      </if>
+      <if test="marathonCreatetime != null" >
+        marathon_createtime = #{marathonCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="marathonUpdater != null" >
+        marathon_updater = #{marathonUpdater,jdbcType=VARCHAR},
+      </if>
+      <if test="marathonUpdatetime != null" >
+        marathon_updatetime = #{marathonUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="marathonDeleted != null" >
+        marathon_deleted = #{marathonDeleted,jdbcType=TINYINT},
+      </if>
+    </set>
+    where marathon_uuid = #{marathonUuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.marathon.manager.pojo.MarathonInfo" >
+    update marathon_info
+    set marathon_name = #{marathonName,jdbcType=VARCHAR},
+      marathon_starttime = #{marathonStarttime,jdbcType=TIMESTAMP},
+      marathon_endtime = #{marathonEndtime,jdbcType=TIMESTAMP},
+      marathon_address = #{marathonAddress,jdbcType=VARCHAR},
+      marathon_creater = #{marathonCreater,jdbcType=VARCHAR},
+      marathon_createtime = #{marathonCreatetime,jdbcType=TIMESTAMP},
+      marathon_updater = #{marathonUpdater,jdbcType=VARCHAR},
+      marathon_updatetime = #{marathonUpdatetime,jdbcType=TIMESTAMP},
+      marathon_deleted = #{marathonDeleted,jdbcType=TINYINT}
+    where marathon_uuid = #{marathonUuid,jdbcType=VARCHAR}
+  </update>
+</mapper>
