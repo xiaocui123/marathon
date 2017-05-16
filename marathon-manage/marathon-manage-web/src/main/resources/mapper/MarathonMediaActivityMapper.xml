@@ -34,7 +34,7 @@
     delete from marathon_media_activity
     where media_activity_uuid = #{mediaActivityUuid,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.marathon.manager.pojo.MarathonMediaActivity" >
+  <insert id="insert" parameterType="com.marathon.manage.pojo.MarathonMediaActivity" >
     insert into marathon_media_activity (media_activity_uuid, marathon_uuid, 
       media_activity_type, media_activity_name, media_activity_starttime, 
       media_activity_endtime, media_activity_director, 
@@ -52,7 +52,7 @@
       #{mediaActivityUpdatetime,jdbcType=TIMESTAMP}, #{mediaActivityDeleted,jdbcType=TINYINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.marathon.manager.pojo.MarathonMediaActivity" >
+  <insert id="insertSelective" parameterType="com.marathon.manage.pojo.MarathonMediaActivity" >
     insert into marathon_media_activity
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="mediaActivityUuid != null" >
@@ -149,7 +149,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.marathon.manager.pojo.MarathonMediaActivity" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.marathon.manage.pojo.MarathonMediaActivity" >
     update marathon_media_activity
     <set >
       <if test="marathonUuid != null" >
@@ -197,7 +197,7 @@
     </set>
     where media_activity_uuid = #{mediaActivityUuid,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.marathon.manager.pojo.MarathonMediaActivity" >
+  <update id="updateByPrimaryKey" parameterType="com.marathon.manage.pojo.MarathonMediaActivity" >
     update marathon_media_activity
     set marathon_uuid = #{marathonUuid,jdbcType=VARCHAR},
       media_activity_type = #{mediaActivityType,jdbcType=VARCHAR},

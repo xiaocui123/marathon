@@ -27,7 +27,7 @@
     delete from marathon_info
     where marathon_uuid = #{marathonUuid,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.marathon.manager.pojo.MarathonInfo" >
+  <insert id="insert" parameterType="com.marathon.manage.pojo.MarathonInfo" >
     insert into marathon_info (marathon_uuid, marathon_name, marathon_starttime, 
       marathon_endtime, marathon_address, marathon_creater, 
       marathon_createtime, marathon_updater, 
@@ -37,7 +37,7 @@
       #{marathonCreatetime,jdbcType=TIMESTAMP}, #{marathonUpdater,jdbcType=VARCHAR}, 
       #{marathonUpdatetime,jdbcType=TIMESTAMP}, #{marathonDeleted,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.marathon.manager.pojo.MarathonInfo" >
+  <insert id="insertSelective" parameterType="com.marathon.manage.pojo.MarathonInfo" >
     insert into marathon_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="marathonUuid != null" >
@@ -104,7 +104,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.marathon.manager.pojo.MarathonInfo" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.marathon.manage.pojo.MarathonInfo" >
     update marathon_info
     <set >
       <if test="marathonName != null" >
@@ -137,7 +137,7 @@
     </set>
     where marathon_uuid = #{marathonUuid,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.marathon.manager.pojo.MarathonInfo" >
+  <update id="updateByPrimaryKey" parameterType="com.marathon.manage.pojo.MarathonInfo" >
     update marathon_info
     set marathon_name = #{marathonName,jdbcType=VARCHAR},
       marathon_starttime = #{marathonStarttime,jdbcType=TIMESTAMP},
@@ -150,4 +150,11 @@
       marathon_deleted = #{marathonDeleted,jdbcType=TINYINT}
     where marathon_uuid = #{marathonUuid,jdbcType=VARCHAR}
   </update>
+
+  <select id="queryAllMarathons" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM marathon_info
+    ORDER BY marathon_name
+  </select>
 </mapper>

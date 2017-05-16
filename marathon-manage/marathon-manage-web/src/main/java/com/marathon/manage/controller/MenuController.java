@@ -26,7 +26,7 @@ public class MenuController {
         menuVO.setUuid(UUID.randomUUID().toString());
         menuVO.setName("赛事管理");
         menuVO.setIconCls("glyphicon glyphicon-book");
-        menuVO.setUrl("marathoninfo/init");
+        menuVO.setUrl("marathon/init");
         lstMenu.add(menuVO);
 
         MenuVO menuVO2 = new MenuVO();

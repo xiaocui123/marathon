@@ -33,11 +33,6 @@
             <groupId>javax.servlet</groupId>
             <artifactId>jsp-api</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
         <!--单元测试-->
         <!--由于 junit 在父 pom 是 scope 是定义为 test，所以没办法有传递性，所以哪里要用到需要进行重新声明-->
         <dependency>

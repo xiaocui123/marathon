@@ -1,5 +1,9 @@
 package com.marathon.manage.pojo;
 
+import com.google.common.base.MoreObjects;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MarathonInfo {
@@ -9,7 +13,11 @@ public class MarathonInfo {
 
     private Date marathonStarttime;
 
+    private String marathonStarttimeStr;
+
     private Date marathonEndtime;
+
+    private String marathonEndtimeStr;
 
     private String marathonAddress;
 
@@ -101,5 +109,39 @@ public class MarathonInfo {
 
     public void setMarathonDeleted(Byte marathonDeleted) {
         this.marathonDeleted = marathonDeleted;
+    }
+
+    public String getMarathonStarttimeStr() {
+        return marathonStarttimeStr;
+    }
+
+    public void setMarathonStarttimeStr(String marathonStarttimeStr) {
+        try {
+            this.marathonStarttimeStr = marathonStarttimeStr;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            this.marathonStarttime = sdf.parse(marathonStarttimeStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public String getMarathonEndtimeStr() {
+        return marathonEndtimeStr;
+    }
+
+    public void setMarathonEndtimeStr(String marathonEndtimeStr) {
+        try {
+            this.marathonEndtimeStr = marathonEndtimeStr;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            this.marathonEndtime = sdf.parse(marathonEndtimeStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("marathonName", marathonName).toString();
     }
 }

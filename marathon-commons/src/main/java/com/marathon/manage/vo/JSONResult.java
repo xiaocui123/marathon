@@ -1,10 +1,9 @@
 package com.marathon.manage.vo;
 
 public class JSONResult {
-    
+
     private String message;
-    private String result;
-    private String success;
+    private Boolean success = true;
 
 
     public String getMessage() {
@@ -15,19 +14,11 @@ public class JSONResult {
         this.message = message;
     }
 
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
-
-    public String getSuccess() {
+    public Boolean getSuccess() {
         return success;
     }
 
-    public void setSuccess(String success) {
+    public void setSuccess(Boolean success) {
         this.success = success;
     }
 }
