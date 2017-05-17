@@ -26,16 +26,16 @@ $(function () {
         detailView: false,                   //是否显示父子表
         columns: [
             {
-                field: "address_id", title: "序号", width: 40, align: 'center',
+                field: "marathonUuid", title: "序号", width: 40, align: 'center',
                 formatter: function (value, row, index) {
                     return index + 1;
                 }
             },
             {field: "marathonName", title: "赛事名称", width: 100, valign: 'middle'},
-            {field: "marathonStarttime", title: "开始时间", valign: 'middle'},
-            {field: "marathonEndtime", title: "结束时间", valign: 'middle'},
+            {field: "marathonStarttimeStr", title: "开始时间", valign: 'middle'},
+            {field: "marathonEndtimeStr", title: "结束时间", valign: 'middle'},
             {field: "marathonCreater", title: "创建人", valign: 'middle'},
-            {field: "marathonCreatetime", title: "创建时间", valign: 'middle'}
+            {field: "marathonCreatetimeStr", title: "创建时间", valign: 'middle'}
         ]
     });
 

@@ -33,7 +33,6 @@ public class MarathonInfoController {
     public JSONResult addMarathon(@RequestBody MarathonInfo marathonInfo, HttpServletRequest request) {
         JSONResult result = new JSONResult();
         String userId = (String) request.getSession().getAttribute(MarathonConstants.SYSTEM_USER_ID);
-        userId="test";
         marathonInfo.setMarathonCreater(userId);
         marathonInfoService.addMarathon(marathonInfo);
         return result;

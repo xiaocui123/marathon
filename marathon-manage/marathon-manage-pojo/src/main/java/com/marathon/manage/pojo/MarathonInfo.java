@@ -1,6 +1,7 @@
 package com.marathon.manage.pojo;
 
 import com.google.common.base.MoreObjects;
+import com.marathon.manage.utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,6 +25,8 @@ public class MarathonInfo {
     private String marathonCreater;
 
     private Date marathonCreatetime;
+
+    private String marathonCreatetimeStr;
 
     private String marathonUpdater;
 
@@ -112,32 +115,33 @@ public class MarathonInfo {
     }
 
     public String getMarathonStarttimeStr() {
+        this.marathonStarttimeStr = DateUtils.convert(marathonStarttime);
         return marathonStarttimeStr;
     }
 
     public void setMarathonStarttimeStr(String marathonStarttimeStr) {
-        try {
-            this.marathonStarttimeStr = marathonStarttimeStr;
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            this.marathonStarttime = sdf.parse(marathonStarttimeStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        this.marathonStarttimeStr = marathonStarttimeStr;
+        this.marathonStarttime = DateUtils.convert(marathonStarttimeStr);
 
     }
 
     public String getMarathonEndtimeStr() {
+        this.marathonEndtimeStr = DateUtils.convert(marathonEndtime);
         return marathonEndtimeStr;
     }
 
     public void setMarathonEndtimeStr(String marathonEndtimeStr) {
-        try {
-            this.marathonEndtimeStr = marathonEndtimeStr;
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            this.marathonEndtime = sdf.parse(marathonEndtimeStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        this.marathonEndtimeStr = marathonEndtimeStr;
+        this.marathonEndtime = DateUtils.convert(marathonEndtimeStr);
+    }
+
+    public String getMarathonCreatetimeStr() {
+        marathonCreatetimeStr = DateUtils.convert(marathonCreatetime);
+        return marathonCreatetimeStr;
+    }
+
+    public void setMarathonCreatetimeStr(String marathonCreatetimeStr) {
+        this.marathonCreatetimeStr = marathonCreatetimeStr;
     }
 
     @Override
