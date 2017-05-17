@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="common/common.jsp" %>
-<title>欢迎使用融合通信云平台</title>
+<title>欢迎使用赛事管理系统</title>
 <link href="${ctx}/resource/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="${ctx}/resource/css/layout.css">
 <script src="${ctx}/resource/js/index.js"></script>
@@ -23,13 +23,13 @@
                 <li class="dropdown">
                     <a class="dropdown-toggle menu-btn" type="button" data-toggle="dropdown">
                     	<span class="glyphicon glyphicon-user"></span> 
-                    	<span>${sessionScope.SYSTEM_USER.staff_name}</span>
+                    	<span>${sessionScope.SYSTEM_USER.userName}</span>
 				        <span class="caret"></span>
 				    </a>
                     <ul class="dropdown-menu pull-right hzp16110_dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                         <li role="presentation"><a role="menuitem" tabindex="-1"  data-toggle="modal" data-target="#myModal" href="#">修改密码</a></li>
                         <li role="presentation"><a  href="javascript:void(0);" onclick="showAbout();">关于</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="${ctx}/login/goOut">注销</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="${ctx}/sys/logout">注销</a></li>
                        <!--  <li role="presentation" class="divider"></li>
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:;">关于</a></li> -->
                     </ul>

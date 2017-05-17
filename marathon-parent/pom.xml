@@ -60,6 +60,7 @@
         <httpclient.version>4.3.3</httpclient.version>
         <jackson-databind.version>2.4.2</jackson-databind.version>
         <fastjson.version>1.1.43</fastjson.version>
+        <shiro.version>1.2.3</shiro.version>
 
         <guava.version>19.0</guava.version>
         <dom4j.version>2.0.0</dom4j.version>
@@ -318,6 +319,28 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
+            </dependency>
+
+            <!-- shiro身份验证与授权 -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-core</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-web</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-ehcache</artifactId>
+                <version>${shiro.version}</version>
             </dependency>
 
 
