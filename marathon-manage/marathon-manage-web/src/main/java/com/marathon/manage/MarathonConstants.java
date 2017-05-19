@@ -6,6 +6,12 @@ package com.marathon.manage;
 public interface MarathonConstants {
 
     String SYSTEM_USER = "SYSTEM_USER";
-    String SYSTEM_USER_ID="SYSTEM_USER_ID";
+    String SYSTEM_USER_ID = "SYSTEM_USER_ID";
 
+    //媒体活动类型
+    String TRADITION_MEDIA = "0";
+    String NEW_MEDIA = "1";
+    String LIVE_MEDIA = "2";
+    String VIDEO_MEDIA = "3";
+    String PICTURE_MEDIA = "4";
 }

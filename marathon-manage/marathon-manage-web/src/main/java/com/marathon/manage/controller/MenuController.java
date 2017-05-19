@@ -33,7 +33,7 @@ public class MenuController {
         menuVO2.setName("媒体服务");
         menuVO2.setIconCls("glyphicon glyphicon-earphone");
         menuVO2.setUuid(UUID.randomUUID().toString());
-        menuVO2.setUrl("media/init");
+        menuVO2.setUrl("mediaactivity/init");
         lstMenu.add(menuVO2);
 
         return lstMenu;

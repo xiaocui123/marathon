@@ -41,4 +41,9 @@ public class MarathonInfoServiceImpl implements MarathonInfoService {
         page.setRows(result.getResult());
         return lstMarathon;
     }
+
+    @Override
+    public MarathonInfo queryById(String marathonUuid) {
+        return marathonInfoMapper.selectByPrimaryKey(marathonUuid);
+    }
 }

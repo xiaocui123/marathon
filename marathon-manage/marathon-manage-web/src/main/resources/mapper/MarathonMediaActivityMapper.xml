@@ -215,4 +215,12 @@
       media_activity_deleted = #{mediaActivityDeleted,jdbcType=TINYINT}
     where media_activity_uuid = #{mediaActivityUuid,jdbcType=VARCHAR}
   </update>
+  
+  <select id="queryByMarathon" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from marathon_media_activity
+    where marathon_uuid = #{marathonId,jdbcType=VARCHAR}
+    and media_activity_type = #{activityType,jdbcType=VARCHAR}
+  </select>
 </mapper>

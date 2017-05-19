@@ -25,4 +25,6 @@ public interface MarathonInfoService {
      * @param page
      */
     List<MarathonInfo> queryForAll(Page<MarathonInfo> page);
+
+    MarathonInfo queryById(String marathonUuid);
 }

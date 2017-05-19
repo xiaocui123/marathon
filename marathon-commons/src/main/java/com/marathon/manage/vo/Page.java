@@ -9,7 +9,7 @@ import java.util.List;
  * @author wangbin
  * @time 2016年4月22日18:04:50
  */
-public final class Page<T> {
+public class Page<T> {
 
     private int curPage = 1; // 当前是第几页
     protected int limit = 0;// 每页行数

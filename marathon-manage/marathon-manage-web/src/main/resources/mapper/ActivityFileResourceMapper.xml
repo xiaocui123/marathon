@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.marathon.manage.mapper.ActivityFileResourceMapper" >
+  <resultMap id="BaseResultMap" type="com.marathon.manage.pojo.ActivityFileResource" >
+    <id column="file_resource_id" property="fileResourceId" jdbcType="VARCHAR" />
+    <result column="file_resource_type" property="fileResourceType" jdbcType="VARCHAR" />
+    <result column="file_resource_url" property="fileResourceUrl" jdbcType="VARCHAR" />
+    <result column="activity_id" property="activityId" jdbcType="INTEGER" />
+    <result column="file_resource_date" property="fileResourceDate" jdbcType="TIMESTAMP" />
+    <result column="file_resource_name" property="fileResourceName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    file_resource_id, file_resource_type, file_resource_url, activity_id, file_resource_date, 
+    file_resource_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from activity_file_resource
+    where file_resource_id = #{fileResourceId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from activity_file_resource
+    where file_resource_id = #{fileResourceId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.marathon.manage.pojo.ActivityFileResource" >
+    insert into activity_file_resource (file_resource_id, file_resource_type, 
+      file_resource_url, activity_id, file_resource_date, 
+      file_resource_name)
+    values (#{fileResourceId,jdbcType=VARCHAR}, #{fileResourceType,jdbcType=VARCHAR}, 
+      #{fileResourceUrl,jdbcType=VARCHAR}, #{activityId,jdbcType=INTEGER}, #{fileResourceDate,jdbcType=TIMESTAMP}, 
+      #{fileResourceName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.marathon.manage.pojo.ActivityFileResource" >
+    insert into activity_file_resource
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fileResourceId != null" >
+        file_resource_id,
+      </if>
+      <if test="fileResourceType != null" >
+        file_resource_type,
+      </if>
+      <if test="fileResourceUrl != null" >
+        file_resource_url,
+      </if>
+      <if test="activityId != null" >
+        activity_id,
+      </if>
+      <if test="fileResourceDate != null" >
+        file_resource_date,
+      </if>
+      <if test="fileResourceName != null" >
+        file_resource_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fileResourceId != null" >
+        #{fileResourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileResourceType != null" >
+        #{fileResourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="fileResourceUrl != null" >
+        #{fileResourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="activityId != null" >
+        #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="fileResourceDate != null" >
+        #{fileResourceDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fileResourceName != null" >
+        #{fileResourceName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.marathon.manage.pojo.ActivityFileResource" >
+    update activity_file_resource
+    <set >
+      <if test="fileResourceType != null" >
+        file_resource_type = #{fileResourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="fileResourceUrl != null" >
+        file_resource_url = #{fileResourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="activityId != null" >
+        activity_id = #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="fileResourceDate != null" >
+        file_resource_date = #{fileResourceDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fileResourceName != null" >
+        file_resource_name = #{fileResourceName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where file_resource_id = #{fileResourceId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.marathon.manage.pojo.ActivityFileResource" >
+    update activity_file_resource
+    set file_resource_type = #{fileResourceType,jdbcType=VARCHAR},
+      file_resource_url = #{fileResourceUrl,jdbcType=VARCHAR},
+      activity_id = #{activityId,jdbcType=INTEGER},
+      file_resource_date = #{fileResourceDate,jdbcType=TIMESTAMP},
+      file_resource_name = #{fileResourceName,jdbcType=VARCHAR}
+    where file_resource_id = #{fileResourceId,jdbcType=VARCHAR}
+  </update>
+</mapper>
