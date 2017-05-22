@@ -14,4 +14,13 @@ public interface FileResourceService {
     int update(ActivityFileResource fileResource);
 
     List<ActivityFileResource> queryByActivity(String activityId);
+
+    int delete(String fileResourceId);
+
+    /**
+     * 删除活动相关的附件信息
+     * @param activityId
+     * @return
+     */
+    int deleteByActivity(String activityId);
 }

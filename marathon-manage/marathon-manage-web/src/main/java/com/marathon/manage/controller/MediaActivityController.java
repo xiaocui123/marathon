@@ -97,4 +97,12 @@ public class MediaActivityController {
     public List<ActivityFileResource> queryFileResources(@RequestParam("activityId") String activityId) {
         return fileResourceService.queryByActivity(activityId);
     }
+
+    @RequestMapping("/delete")
+    @ResponseBody
+    public JSONResult delete(@RequestBody List<String> arrayActivityId){
+        JSONResult result=new JSONResult();
+        mediaActivityService.deleteActivity(arrayActivityId);
+        return result;
+    }
 }

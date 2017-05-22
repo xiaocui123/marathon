@@ -3,6 +3,7 @@ package com.marathon.manage.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.marathon.manage.mapper.MarathonMediaActivityMapper;
 import com.marathon.manage.pojo.MarathonMediaActivity;
+import com.marathon.manage.service.FileResourceService;
 import com.marathon.manage.service.MediaActivityService;
 import com.marathon.manage.vo.Page;
 import org.slf4j.Logger;
@@ -24,6 +25,9 @@ public class MediaActivityServiceImpl implements MediaActivityService {
     @Autowired
     private MarathonMediaActivityMapper mediaActivityMapper;
 
+    @Autowired
+    private FileResourceService fileResourceService;
+
     @Override
     public int addActivity(MarathonMediaActivity activity) {
         if (activity.getMediaActivityUuid() == null) {
@@ -35,6 +39,15 @@ public class MediaActivityServiceImpl implements MediaActivityService {
     @Override
     public int updateActivity(MarathonMediaActivity activity) {
         return mediaActivityMapper.updateByPrimaryKeySelective(activity);
+    }
+
+    @Override
+    public int deleteActivity(List<String> arrayActivityId) {
+        for (String activityId : arrayActivityId) {
+            mediaActivityMapper.deleteByPrimaryKey(activityId);
+            fileResourceService.deleteByActivity(activityId);
+        }
+        return 0;
     }
 
     @Override

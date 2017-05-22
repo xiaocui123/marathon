@@ -1,22 +1,19 @@
 package com.marathon.manage.controller;
 
-import com.google.common.collect.Maps;
 import com.marathon.manage.pojo.ActivityFileResource;
 import com.marathon.manage.service.FileResourceService;
-import org.apache.commons.io.FileUtils;
+import com.marathon.manage.vo.JSONResult;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -65,5 +62,19 @@ public class FileResourceController {
             }
         }
         return fileResource;
+    }
+
+    @RequestMapping("/deleteFile")
+    @ResponseBody
+    public JSONResult deleteFile(@RequestBody ActivityFileResource fileResource) {
+        JSONResult result = new JSONResult();
+        try {
+            Files.deleteIfExists(Paths.get(fileResource.getFileResourceUrl()));
+            fileResourceService.delete(fileResource.getFileResourceId());
+        } catch (IOException e) {
+            result.setSuccess(false);
+            result.setMessage(e.getMessage());
+        }
+        return result;
     }
 }

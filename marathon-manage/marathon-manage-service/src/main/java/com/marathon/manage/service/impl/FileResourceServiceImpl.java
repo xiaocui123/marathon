@@ -35,4 +35,14 @@ public class FileResourceServiceImpl implements FileResourceService {
     public List<ActivityFileResource> queryByActivity(String activityId) {
         return fileResourceMapper.queryFilesByActivity(activityId);
     }
+
+    @Override
+    public int delete(String fileResourceId) {
+        return fileResourceMapper.deleteByPrimaryKey(fileResourceId);
+    }
+
+    @Override
+    public int deleteByActivity(String activityId) {
+        return fileResourceMapper.deleteByActivity(activityId);
+    }
 }

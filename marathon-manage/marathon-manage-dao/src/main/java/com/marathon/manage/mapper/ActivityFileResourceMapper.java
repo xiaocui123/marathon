@@ -24,4 +24,6 @@ public interface ActivityFileResourceMapper {
      * @return
      */
     List<ActivityFileResource> queryFilesByActivity(String activityId);
+
+    int deleteByActivity(String activityId);
 }

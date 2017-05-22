@@ -15,6 +15,13 @@ public interface MediaActivityService {
     int updateActivity(MarathonMediaActivity activity);
 
     /**
+     * 删除媒体事件
+     * @param arrayActivityId
+     * @return
+     */
+    int deleteActivity(List<String> arrayActivityId);
+
+    /**
      * 查询赛事的媒体活动
      *
      * @param marathonId:赛事ID

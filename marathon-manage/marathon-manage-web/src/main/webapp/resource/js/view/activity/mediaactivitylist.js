@@ -82,6 +82,10 @@ $(function () {
         updateActivity();
     });
 
+    $('#activity-delete-btn').click(function(){
+        deleteActivity();
+    });
+
     $("#file-0a").fileinput({
         language: 'zh', //设置语言
         uploadUrl: path + "/fileresource/add", //上传的地址
@@ -122,15 +126,31 @@ $(function () {
         var form = data.form, files = data.files, extra = data.extra,
         response = data.response, reader = data.reader;
         var tmplate=
-            '<li class="list-group-item">' +
+            '<li class="list-group-item" id='+response.fileResourceId+'>' +
             '<span>'+response.fileResourceName+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
             '<button class="btn-danger btn" id="delFileBtn">删除</button>' +
             '</li>';
         $(tmplate).appendTo($('#atachment_list'))
             .data("file",response)
             .find('button').click(function(){
-            var fileResource=$(this).parent().data("file");
-            console.log(fileResource.fileResourceId);
+                var fileResource=$(this).parent().data("file");
+                $.ajax({
+                    url: path + '/fileresource/deleteFile',
+                    method: 'post',
+                    dataType: "json",
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify(fileResource),
+                    success: function (response) {
+                        if (!response.success) {
+                            bootbox.alert(response.message);
+                        } else {
+                           $('#'+fileResource.fileResourceId).remove();
+                        }
+                    },
+                    error: function (response) {
+                        bootbox.alert("error");
+                    }
+                });
         });
     });
 
@@ -160,14 +180,31 @@ function updateActivity(){
     $.get(path+"/mediaactivity/queryFileResources?activityId="+activity[0].mediaActivityUuid,function(result){
         $.each(result,function(index,fileResource){
             var tmplate=
-                '<li class="list-group-item">' +
+                '<li class="list-group-item" id='+fileResource.fileResourceId+'>' +
                 '<span>'+fileResource.fileResourceName+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
                 '<button class="btn-danger btn" id="delFileBtn">删除</button>' +
                 '</li>';
             $(tmplate).appendTo($('#atachment_list'))
                 .data("file",fileResource)
                 .find('button').click(function(){
-                $(this).parent().data("file");
+                    var fileResource=$(this).parent().data("file");
+                    $.ajax({
+                        url: path + '/fileresource/deleteFile',
+                        method: 'post',
+                        dataType: "json",
+                        contentType: 'application/json;charset=UTF-8',
+                        data: JSON.stringify(fileResource),
+                        success: function (response) {
+                            if (!response.success) {
+                                bootbox.alert(response.message);
+                            } else {
+                                $('#'+fileResource.fileResourceId).remove();
+                            }
+                        },
+                        error: function (response) {
+                            bootbox.alert("error");
+                        }
+                    });
             });
 
         });
@@ -271,5 +308,34 @@ function saveActivity(){
             }
         });
 
+    }
+}
+
+function deleteActivity(){
+    var selectedActivitys = $('#grid').bootstrapTable('getSelections');
+    if(selectedActivitys.length > 0){
+        var arrayActivityId=[];
+        $.each(selectedActivitys,function(index,activity){
+            arrayActivityId.push(activity.mediaActivityUuid);
+        });
+        $.ajax({
+            url: path + '/mediaactivity/delete',
+            method: 'post',
+            dataType: "json",
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify(arrayActivityId),
+            success: function (response) {
+                if (!response.success) {
+                    bootbox.alert(response.message);
+                } else {
+                    bootbox.alert("删除媒体活动成功！", function () {
+                        $("#grid").bootstrapTable('refresh');
+                    });
+                }
+            },
+            error: function (response) {
+                bootbox.alert("error");
+            }
+        });
     }
 }

@@ -111,4 +111,9 @@
     FROM activity_file_resource
     WHERE activity_id = #{activityId,jdbcType=VARCHAR}
   </select>
+
+  <delete id="deleteByActivity" parameterType="java.lang.String">
+    delete from activity_file_resource
+    where activity_id = #{activityId,jdbcType=VARCHAR}
+  </delete>
 </mapper>
