@@ -33,6 +33,11 @@ public class MediaActivityServiceImpl implements MediaActivityService {
     }
 
     @Override
+    public int updateActivity(MarathonMediaActivity activity) {
+        return mediaActivityMapper.updateByPrimaryKeySelective(activity);
+    }
+
+    @Override
     public List<MarathonMediaActivity> queryActivityByMarathon(String marathonId, String activityType, Page<MarathonMediaActivity> page) {
         PageHelper.offsetPage(page.getOffset(), page.getLimit());
         List<MarathonMediaActivity> result = mediaActivityMapper.queryByMarathon(marathonId, activityType);

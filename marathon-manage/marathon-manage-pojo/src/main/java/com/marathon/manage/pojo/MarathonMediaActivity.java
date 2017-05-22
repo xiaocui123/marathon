@@ -1,5 +1,7 @@
 package com.marathon.manage.pojo;
 
+import com.marathon.manage.utils.DateUtils;
+
 import java.util.Date;
 
 public class MarathonMediaActivity {
@@ -13,7 +15,11 @@ public class MarathonMediaActivity {
 
     private Date mediaActivityStarttime;
 
+    private String mediaActivityStarttimeStr;
+
     private Date mediaActivityEndtime;
+
+    private String mediaActivityEndtimeStr;
 
     private String mediaActivityDirector;
 
@@ -151,5 +157,25 @@ public class MarathonMediaActivity {
 
     public void setMediaActivityDeleted(Byte mediaActivityDeleted) {
         this.mediaActivityDeleted = mediaActivityDeleted;
+    }
+
+    public String getMediaActivityStarttimeStr() {
+        this.mediaActivityStarttimeStr = DateUtils.convert(mediaActivityStarttime);
+        return mediaActivityStarttimeStr;
+    }
+
+    public void setMediaActivityStarttimeStr(String mediaActivityStarttimeStr) {
+        this.mediaActivityStarttimeStr = mediaActivityStarttimeStr;
+        this.mediaActivityStarttime = DateUtils.convert(mediaActivityStarttimeStr);
+    }
+
+    public String getMediaActivityEndtimeStr() {
+        this.mediaActivityEndtimeStr = DateUtils.convert(mediaActivityEndtime);
+        return mediaActivityEndtimeStr;
+    }
+
+    public void setMediaActivityEndtimeStr(String mediaActivityEndtimeStr) {
+        this.mediaActivityEndtimeStr = mediaActivityEndtimeStr;
+        this.mediaActivityEndtime = DateUtils.convert(mediaActivityEndtimeStr);
     }
 }

@@ -6,6 +6,7 @@ import com.marathon.manage.service.FileResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -23,5 +24,15 @@ public class FileResourceServiceImpl implements FileResourceService {
             fileResource.setFileResourceId(UUID.randomUUID().toString());
         }
         return fileResourceMapper.insertSelective(fileResource);
+    }
+
+    @Override
+    public int update(ActivityFileResource fileResource) {
+        return fileResourceMapper.updateByPrimaryKeySelective(fileResource);
+    }
+
+    @Override
+    public List<ActivityFileResource> queryByActivity(String activityId) {
+        return fileResourceMapper.queryFilesByActivity(activityId);
     }
 }

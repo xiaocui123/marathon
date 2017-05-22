@@ -5,7 +5,7 @@
     <id column="file_resource_id" property="fileResourceId" jdbcType="VARCHAR" />
     <result column="file_resource_type" property="fileResourceType" jdbcType="VARCHAR" />
     <result column="file_resource_url" property="fileResourceUrl" jdbcType="VARCHAR" />
-    <result column="activity_id" property="activityId" jdbcType="INTEGER" />
+    <result column="activity_id" property="activityId" jdbcType="VARCHAR" />
     <result column="file_resource_date" property="fileResourceDate" jdbcType="TIMESTAMP" />
     <result column="file_resource_name" property="fileResourceName" jdbcType="VARCHAR" />
   </resultMap>
@@ -28,7 +28,7 @@
       file_resource_url, activity_id, file_resource_date, 
       file_resource_name)
     values (#{fileResourceId,jdbcType=VARCHAR}, #{fileResourceType,jdbcType=VARCHAR}, 
-      #{fileResourceUrl,jdbcType=VARCHAR}, #{activityId,jdbcType=INTEGER}, #{fileResourceDate,jdbcType=TIMESTAMP}, 
+      #{fileResourceUrl,jdbcType=VARCHAR}, #{activityId,jdbcType=VARCHAR}, #{fileResourceDate,jdbcType=TIMESTAMP},
       #{fileResourceName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.marathon.manage.pojo.ActivityFileResource" >
@@ -64,7 +64,7 @@
         #{fileResourceUrl,jdbcType=VARCHAR},
       </if>
       <if test="activityId != null" >
-        #{activityId,jdbcType=INTEGER},
+        #{activityId,jdbcType=VARCHAR},
       </if>
       <if test="fileResourceDate != null" >
         #{fileResourceDate,jdbcType=TIMESTAMP},
@@ -84,7 +84,7 @@
         file_resource_url = #{fileResourceUrl,jdbcType=VARCHAR},
       </if>
       <if test="activityId != null" >
-        activity_id = #{activityId,jdbcType=INTEGER},
+        activity_id = #{activityId,jdbcType=VARCHAR},
       </if>
       <if test="fileResourceDate != null" >
         file_resource_date = #{fileResourceDate,jdbcType=TIMESTAMP},
@@ -99,9 +99,16 @@
     update activity_file_resource
     set file_resource_type = #{fileResourceType,jdbcType=VARCHAR},
       file_resource_url = #{fileResourceUrl,jdbcType=VARCHAR},
-      activity_id = #{activityId,jdbcType=INTEGER},
+      activity_id = #{activityId,jdbcType=VARCHAR},
       file_resource_date = #{fileResourceDate,jdbcType=TIMESTAMP},
       file_resource_name = #{fileResourceName,jdbcType=VARCHAR}
     where file_resource_id = #{fileResourceId,jdbcType=VARCHAR}
   </update>
+
+  <select id="queryFilesByActivity" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM activity_file_resource
+    WHERE activity_id = #{activityId,jdbcType=VARCHAR}
+  </select>
 </mapper>

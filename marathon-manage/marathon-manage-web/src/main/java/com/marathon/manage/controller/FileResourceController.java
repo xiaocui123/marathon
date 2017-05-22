@@ -5,6 +5,7 @@ import com.marathon.manage.pojo.ActivityFileResource;
 import com.marathon.manage.service.FileResourceService;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +28,7 @@ public class FileResourceController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=utf8")
     @ResponseBody
-    public ActivityFileResource add(@RequestParam("file") MultipartFile file) throws IOException {
+    public ActivityFileResource add(@RequestParam("file") MultipartFile file, String activityId) throws IOException {
         ActivityFileResource fileResource = new ActivityFileResource();
         if (!file.isEmpty()) {
             InputStream in = null;
@@ -52,6 +53,9 @@ public class FileResourceController {
                 fileResource.setFileResourceName(file.getOriginalFilename());
                 fileResource.setFileResourceType("0");
                 fileResource.setFileResourceUrl(serverFile.getAbsolutePath());
+                if (StringUtils.isNotEmpty(activityId)) {
+                    fileResource.setActivityId(activityId);
+                }
                 fileResourceService.addFileResource(fileResource);
             } catch (Exception e) {
                 e.printStackTrace();

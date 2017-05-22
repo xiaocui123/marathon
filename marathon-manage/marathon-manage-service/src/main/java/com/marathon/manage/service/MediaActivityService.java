@@ -12,6 +12,8 @@ public interface MediaActivityService {
 
     int addActivity(MarathonMediaActivity activity);
 
+    int updateActivity(MarathonMediaActivity activity);
+
     /**
      * 查询赛事的媒体活动
      *

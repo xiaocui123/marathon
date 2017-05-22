@@ -29,14 +29,17 @@ $(function () {
         detailView: false,                   //是否显示父子表
         columns: [
             {
+                checkbox: true
+            },
+            {
                 field: "mediaActivityUuid", title: "序号", width: 40, align: 'center',
                 formatter: function (value, row, index) {
                     return index + 1;
                 }
             },
             {field: "mediaActivityName", title: "活动名称", width: 100, valign: 'middle'},
-            {field: "mediaActivityStarttime", title: "开始时间", valign: 'middle'},
-            {field: "mediaActivityEndtime", title: "结束时间", valign: 'middle'}
+            {field: "mediaActivityStarttimeStr", title: "开始时间", valign: 'middle'},
+            {field: "mediaActivityEndtimeStr", title: "结束时间", valign: 'middle'}
         ]
     });
 
@@ -50,9 +53,33 @@ $(function () {
         return parameter;
     }
 
+    //设置选中背景色
+    $('#grid').on('click-row.bs.table',function(e,row,$element){
+        $('.success').removeClass('success');
+        $($element).addClass('success');
+    });
+
+    $('.form_datetime').each(function(){
+        var getTimeId = $(this).find("input");
+        setTimer = {
+            pickerPosition : "bottom-left",
+            autoclose : true,
+            format : 'yyyy-mm-dd hh:ii',
+            pickDate: true,
+            pickTime: true,
+            hourStep: 1,
+            minView : 1,
+            minuteStep: 5
+        }
+        getTimeId.datetimepicker(setTimer);
+    });
+
     $('#activity-add-btn').click(function () {
-        $('#atachment_list').empty();
-        $('#create-activity-modal').modal("show");
+        createActivity();
+    });
+
+    $('#activity-update-btn').click(function () {
+        updateActivity();
     });
 
     $("#file-0a").fileinput({
@@ -67,7 +94,13 @@ $(function () {
         dropZoneEnabled: false,//是否显示拖拽区域
         maxFileCount: 1, //表示允许同时上传的最大文件个数
         enctype: 'multipart/form-data',
-        validateInitialCount: true
+        validateInitialCount: true,
+        uploadExtraData: function(previewId, index) {
+            var data = {
+                activityId : $("#activityId").val(),
+            };
+            return data;
+        },
     });
 
     $('#file-0a').on('fileuploaderror', function (event, data, previewId, index) {
@@ -100,4 +133,143 @@ $(function () {
             console.log(fileResource.fileResourceId);
         });
     });
+
+    $('#saveActivityBtn').click(function(){
+        saveActivity();
+    });
 });
+
+function updateActivity(){
+    var activity = $('#grid').bootstrapTable('getSelections');
+    if(activity.length !=1){
+        bootbox.alert("请选择一个媒体活动！");
+        return false;
+    }
+    $('#create-activity-modal').data("activity",activity[0]);
+    $('#activityId').val(activity[0].mediaActivityUuid);
+
+    $('#marathon-name-input').val(activity[0].mediaActivityName);
+    $('#activity_startTime').val(activity[0].mediaActivityStarttimeStr);
+    $('#activity_endTime').val(activity[0].mediaActivityEndtimeStr);
+    $('#activity_director').val(activity[0].mediaActivityDirector);
+    $('#cost_budget').val(activity[0].mediaActivityCost);
+    $('#activity_status').val(activity[0].mediaActivityStatus);
+    $('#activity_progress').val(activity[0].mediaActivityProgress);
+
+    $('#atachment_list').empty();
+    $.get(path+"/mediaactivity/queryFileResources?activityId="+activity[0].mediaActivityUuid,function(result){
+        $.each(result,function(index,fileResource){
+            var tmplate=
+                '<li class="list-group-item">' +
+                '<span>'+fileResource.fileResourceName+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                '<button class="btn-danger btn" id="delFileBtn">删除</button>' +
+                '</li>';
+            $(tmplate).appendTo($('#atachment_list'))
+                .data("file",fileResource)
+                .find('button').click(function(){
+                $(this).parent().data("file");
+            });
+
+        });
+    });
+
+    $('#modal-title').html("修改活动");
+    $('#create-activity-modal').modal("show");
+}
+
+function createActivity(){
+    $('#modal-title').html("新建活动");
+    $('#create-activity-modal').removeData("activity");
+
+    $('#marathon-name-input').val("");
+    $('#activity_startTime').val("");
+    $('#activity_endTime').val("");
+    $('#activity_director').val("");
+    $('#cost_budget').val("");
+    $('#activity_status').val("");
+    $('#activity_progress').val("");
+
+    $('#atachment_list').empty();
+
+    $('#create-activity-modal').modal("show");
+}
+
+function saveActivity(){
+    if(!$('#create-activity-modal').data("activity")){
+        //新建活动
+        var activity={
+            marathonUuid:marathonUuid,
+            mediaActivityType:"0",
+            mediaActivityName: $.trim($('#marathon-name-input').val()),
+            mediaActivityStarttimeStr: $.trim($('#activity_startTime').val()),
+            mediaActivityEndtimeStr: $.trim($('#activity_endTime').val()),
+            mediaActivityDirector: $.trim($('#activity_director').val()),
+            mediaActivityCost:$.trim($('#cost_budget').val()),
+            mediaActivityStatus: $.trim($('#activity_status').val()),
+            mediaActivityProgress: $.trim($('#activity_progress').val())
+        }
+        activity.lstFileResourceId=[];
+        $('#atachment_list .list-group-item').each(function(index,item){
+            activity.lstFileResourceId.push($(item).data("file").fileResourceId);
+        });
+
+        $.ajax({
+            url: path + '/mediaactivity/add',
+            method: 'post',
+            dataType: "json",
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify(activity),
+            success: function (response) {
+                if (!response.success) {
+                    bootbox.alert(response.message);
+                } else {
+                    bootbox.alert("添加媒体活动成功！", function () {
+                        $('#create-activity-modal').modal('hide');
+                        $("#grid").bootstrapTable('refresh');
+                    });
+                }
+            },
+            error: function (response) {
+                bootbox.alert("error");
+            }
+        });
+    }else{
+        //修改活动
+        var activity=$('#create-activity-modal').data("activity");
+        var newActivity={};
+        newActivity.mediaActivityUuid=activity.mediaActivityUuid;
+        newActivity.mediaActivityName= $.trim($('#marathon-name-input').val());
+        newActivity.mediaActivityStarttimeStr= $.trim($('#activity_startTime').val());
+        newActivity.mediaActivityEndtimeStr= $.trim($('#activity_endTime').val());
+        newActivity.mediaActivityDirector= $.trim($('#activity_director').val());
+        newActivity.mediaActivityCost=$.trim($('#cost_budget').val());
+        newActivity.mediaActivityStatus= $.trim($('#activity_status').val());
+        newActivity.mediaActivityProgress= $.trim($('#activity_progress').val());
+        newActivity.marathonUuid=activity.marathonUuid;
+        newActivity.activityType=activity.activityType;
+        newActivity.mediaActivityCreator=activity.mediaActivityCreator;
+        newActivity.mediaActivityCreatetime=activity.mediaActivityCreatetime;
+
+        $.ajax({
+            url: path + '/mediaactivity/update',
+            method: 'post',
+            dataType: "json",
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify(newActivity),
+            success: function (response) {
+                if (!response.success) {
+                    bootbox.alert(response.message);
+                } else {
+                    bootbox.alert("修改媒体活动成功！", function () {
+                        $('#create-activity-modal').modal('hide');
+                        $("#grid").bootstrapTable('refresh');
+                    });
+                }
+            },
+            error: function (response) {
+                bootbox.alert("error");
+            }
+        });
+
+    }
+}

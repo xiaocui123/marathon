@@ -129,6 +129,7 @@
 
                     <div class="input-group col-xs-12 clearfix attachment-list-div">
                         <div class="col-xs-10">
+                            <input id="activityId" name="activityId" type="hidden"/>
                             <input id="file-0a" name="file" type="file" multiple class="file-loading">
                         </div>
                     </div>
@@ -141,7 +142,7 @@
                 </div>
                 <div class="modal-footer" id="edit-footer">
                     <button type="button" class="btn btn-primary text-center"
-                            id="saveMarathonBtn">保存
+                            id="saveActivityBtn">保存
                     </button>
                     <button type="button" class="btn btn-default" data-dismiss="modal" id="analySub">关闭</button>
                 </div>

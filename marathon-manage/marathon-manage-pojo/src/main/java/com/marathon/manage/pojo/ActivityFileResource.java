@@ -9,7 +9,7 @@ public class ActivityFileResource {
 
     private String fileResourceUrl;
 
-    private Integer activityId;
+    private String activityId;
 
     private Date fileResourceDate;
 
@@ -39,11 +39,11 @@ public class ActivityFileResource {
         this.fileResourceUrl = fileResourceUrl == null ? null : fileResourceUrl.trim();
     }
 
-    public Integer getActivityId() {
+    public String getActivityId() {
         return activityId;
     }
 
-    public void setActivityId(Integer activityId) {
+    public void setActivityId(String activityId) {
         this.activityId = activityId;
     }
 
