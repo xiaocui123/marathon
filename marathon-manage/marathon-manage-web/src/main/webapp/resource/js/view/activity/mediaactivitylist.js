@@ -154,6 +154,10 @@ $(function () {
         });
     });
 
+    $('#file-0a').on('filebatchuploadcomplete', function(event, files, extra) {
+        $("#file-0a").fileinput('reset');
+    });
+
     $('#saveActivityBtn').click(function(){
         saveActivity();
     });
