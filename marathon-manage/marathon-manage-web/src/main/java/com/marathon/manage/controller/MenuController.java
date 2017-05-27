@@ -1,7 +1,12 @@
 package com.marathon.manage.controller;
 
 import com.google.common.collect.Lists;
+import com.marathon.manage.MarathonConstants;
+import com.marathon.manage.mapper.SysMenuInfoMapper;
+import com.marathon.manage.pojo.SysMenuInfo;
 import com.marathon.manage.qvo.MenuVO;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,25 +23,47 @@ import java.util.UUID;
 @RequestMapping("/menu")
 public class MenuController {
 
+    @Autowired
+    SysMenuInfoMapper menuInfoMapper;
+
     @RequestMapping("/getMenuMenu")
     @ResponseBody
     public List<MenuVO> getMenu(HttpServletRequest request, HttpServletResponse response) {
         List<MenuVO> lstMenu = Lists.newArrayList();
-        MenuVO menuVO = new MenuVO();
-        menuVO.setUuid(UUID.randomUUID().toString());
-        menuVO.setName("赛事管理");
-        menuVO.setIconCls("glyphicon glyphicon-book");
-        menuVO.setUrl("marathon/init");
-        lstMenu.add(menuVO);
+        String userId = (String) request.getSession().getAttribute(MarathonConstants.SYSTEM_USER_ID);
+        List<SysMenuInfo> lstSysMenu = menuInfoMapper.queryByUser(userId);
 
-        MenuVO menuVO2 = new MenuVO();
-        menuVO2.setName("媒体服务");
-        menuVO2.setIconCls("glyphicon glyphicon-earphone");
-        menuVO2.setUuid(UUID.randomUUID().toString());
-        menuVO2.setUrl("mediaactivity/init");
-        lstMenu.add(menuVO2);
+        for (SysMenuInfo sysMenu : lstSysMenu) {
+            if (StringUtils.isEmpty(sysMenu.getParentId())) {
+                lstMenu.add(getMenuVO(sysMenu));
+            }
+        }
 
+        for (SysMenuInfo sysMenu : lstSysMenu) {
+            if (StringUtils.isNotEmpty(sysMenu.getParentId())) {
+                MenuVO menuVO = findMenuVO(lstMenu, sysMenu.getParentId());
+                menuVO.getMenus().add(getMenuVO(sysMenu));
+            }
+        }
         return lstMenu;
+    }
+
+    private MenuVO findMenuVO(List<MenuVO> lstMenu, String parentId) {
+        for (MenuVO menuVO : lstMenu) {
+            if (menuVO.getUuid().equals(parentId)) {
+                return menuVO;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
+    private MenuVO getMenuVO(SysMenuInfo menu) {
+        MenuVO menuVO = new MenuVO();
+        menuVO.setName(menu.getMenuName());
+        menuVO.setUrl(menu.getMenuUrl());
+        menuVO.setIconCls(menu.getMenuClass());
+        menuVO.setUuid(menu.getMenuId());
+        return menuVO;
     }
 
     @RequestMapping("/init")

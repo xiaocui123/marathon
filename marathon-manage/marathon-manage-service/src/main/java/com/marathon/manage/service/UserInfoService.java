@@ -13,4 +13,12 @@ public interface UserInfoService {
      * @return
      */
     public UserInfo checkUser(UserInfo userInfo);
+
+    int add(UserInfo user);
+
+    int update(UserInfo user);
+
+    int delete(String userId);
+
+    UserInfo queryById(String userId);
 }

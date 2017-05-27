@@ -209,7 +209,7 @@
 <script type="text/javascript"
         src="<%=request.getContextPath()%>/js/plugins/bootbox/bootbox.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jQuery-core/md5-min.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/scripts/index.js"></script>
+<script type="text/javascript" src="${ctx}/resource/js/index/login.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 </body>
 </html>

@@ -25,15 +25,15 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from au_t_user
+    from sys_t_user
     where user_id = #{userId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from au_t_user
+    delete from sys_t_user
     where user_id = #{userId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.marathon.manage.pojo.UserInfo" >
-    insert into au_t_user (user_id, user_account, user_name, 
+    insert into sys_t_user (user_id, user_account, user_name,
       user_psw, user_gender, user_age, 
       mobile_phone, address, email, 
       dept_id, create_dt, create_by, 
@@ -47,7 +47,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.marathon.manage.pojo.UserInfo" >
-    insert into au_t_user
+    insert into sys_t_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
         user_id,
@@ -144,7 +144,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.marathon.manage.pojo.UserInfo" >
-    update au_t_user
+    update sys_t_user
     <set >
       <if test="userAccount != null" >
         user_account = #{userAccount,jdbcType=VARCHAR},
@@ -192,7 +192,7 @@
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.marathon.manage.pojo.UserInfo" >
-    update au_t_user
+    update sys_t_user
     set user_account = #{userAccount,jdbcType=VARCHAR},
       user_name = #{userName,jdbcType=VARCHAR},
       user_psw = #{userPsw,jdbcType=VARCHAR},
@@ -213,7 +213,7 @@
   <select id="checkUser" resultMap="BaseResultMap" parameterType="com.marathon.manage.pojo.UserInfo">
     select
     <include refid="Base_Column_List"/>
-    from au_t_user
+    from sys_t_user
     where user_account = #{userAccount,jdbcType = VARCHAR}
     and user_psw = #{userPsw,jdbcType = VARCHAR}
   </select>
