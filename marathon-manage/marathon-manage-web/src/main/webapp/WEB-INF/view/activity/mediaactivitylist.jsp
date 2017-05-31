@@ -154,5 +154,5 @@
 <script src="${ctx}/js/plugins/bootstraptable/bootstrap-table.js"></script>
 <script src="${ctx}/js/plugins/bootstraptable/locale/bootstrap-table-zh-CN.js"></script>
 <script src="${ctx}/resource/assets/bootstrap-fileinput/js/fileinput.js"></script>
-<script src="${cts}/resource/assets/bootstrap-fileinput/js/fileinput_locale_zh.js"/>
+<script src="${ctx}/resource/assets/bootstrap-fileinput/js/fileinput_locale_zh.js"/>
 <script type="text/javascript" src="${ctx}/resource/js/view/activity/mediaactivitylist.js"></script>
