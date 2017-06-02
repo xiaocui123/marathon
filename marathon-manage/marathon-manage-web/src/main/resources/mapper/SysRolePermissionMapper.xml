@@ -68,4 +68,16 @@
       permission_id = #{permissionId,jdbcType=VARCHAR}
     where rp_id = #{rpId,jdbcType=VARCHAR}
   </update>
+
+  <select id="queryBySysRole" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from sys_role_permission
+    where role_id = #{sysRoleId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteBySysRole" parameterType="java.lang.String">
+    delete from sys_role_permission
+    where role_id = #{sysRoleId,jdbcType=VARCHAR}
+  </delete>
 </mapper>

@@ -146,4 +146,11 @@
 	    ) tmp ON sys_role_permission.role_id = tmp.role_id
     ) irp ON sys_t_menu.menu_id = irp.srp_permission
   </select>
+
+  <select id="queryAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from sys_t_menu
+    order by display_order
+  </select>
 </mapper>

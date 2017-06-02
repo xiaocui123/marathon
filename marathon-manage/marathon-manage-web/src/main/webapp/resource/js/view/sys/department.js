@@ -46,7 +46,15 @@ $(function () {
 
     $('#saveStaffBtn').click(function () {
         saveStaff();
-    })
+    });
+
+    $('#allocateRoleBtn').click(function () {
+        allocateRole();
+    });
+
+    $('#saveStaffRoleBtn').click(function () {
+        savaStaffRole();
+    });
 });
 
 function addDept() {
@@ -317,4 +325,63 @@ function saveStaff() {
             }
         }
     }
+}
+
+function allocateRole() {
+    var setting = {
+        check: {
+            enable: true
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        }
+    };
+    var treeObj = $.fn.zTree.getZTreeObj("treeDept");
+    var nodes = treeObj.getSelectedNodes();
+    if (nodes.length == 1) {
+        var selectedNode = nodes[0];
+        if (!selectedNode.isParent) {
+            $.get(path + "/user/role?sysUserId=" + selectedNode.id, function (data) {
+                $.fn.zTree.init($("#treeRole"), setting, data);
+                $('#allocateRole-modal').modal("show").data("data", selectedNode);
+            });
+        }
+    }
+}
+
+function savaStaffRole() {
+    var treeObj = $.fn.zTree.getZTreeObj("treeRole");
+    var nodes = treeObj.getCheckedNodes(true);
+
+    var staffId = $('#allocateRole-modal').data('data').id;
+    var addStaffRoleVO = {};
+    addStaffRoleVO.staffId = staffId;
+    addStaffRoleVO.lstRoleId=[];
+    if (nodes.length > 0) {
+        $.each(nodes, function (index, node) {
+            addStaffRoleVO.lstRoleId.push(node.id);
+        });
+    }
+    $.ajax({
+        url: path + '/user/saveStaffRole',
+        method: 'post',
+        dataType: "json",
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify(addStaffRoleVO),
+        success: function (response) {
+            if (!response) {
+                bootbox.alert("保存角色失败！");
+            } else {
+                bootbox.alert("保存角色成功！", function () {
+                    $('#allocateRole-modal').modal('hide');
+                });
+            }
+        },
+        error: function (response) {
+            bootbox.alert("error");
+        }
+
+    });
 }

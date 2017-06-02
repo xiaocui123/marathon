@@ -18,4 +18,6 @@ public interface SysMenuInfoMapper {
     int updateByPrimaryKey(SysMenuInfo record);
 
     List<SysMenuInfo> queryByUser(String userId);
+
+    List<SysMenuInfo> queryAll();
 }

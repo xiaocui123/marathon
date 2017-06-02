@@ -2,6 +2,8 @@ package com.marathon.manage.mapper;
 
 import com.marathon.manage.pojo.SysRolePermission;
 
+import java.util.List;
+
 public interface SysRolePermissionMapper {
     int deleteByPrimaryKey(String rpId);
 
@@ -14,4 +16,8 @@ public interface SysRolePermissionMapper {
     int updateByPrimaryKeySelective(SysRolePermission record);
 
     int updateByPrimaryKey(SysRolePermission record);
+
+    List<SysRolePermission> queryBySysRole(String sysRoleId);
+
+    void deleteBySysRole(String roleId);
 }

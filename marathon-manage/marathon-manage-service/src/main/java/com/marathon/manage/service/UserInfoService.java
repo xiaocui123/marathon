@@ -2,6 +2,8 @@ package com.marathon.manage.service;
 
 import com.marathon.manage.pojo.UserInfo;
 
+import java.util.List;
+
 /**
  * Created by cui on 2017/5/17.
  */
@@ -21,4 +23,6 @@ public interface UserInfoService {
     int delete(String userId);
 
     UserInfo queryById(String userId);
+
+    void addRole(String staffId,List<String> lstRoleId);
 }

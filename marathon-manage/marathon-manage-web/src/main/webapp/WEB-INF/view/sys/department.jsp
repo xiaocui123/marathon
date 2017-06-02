@@ -36,6 +36,9 @@
             <button type="button" class="btn btn-default" id="deleteStaffBtn">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除人员
             </button>
+            <button type="button" class="btn btn-primary" id="allocateRoleBtn">
+                <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>分配角色
+            </button>
     </div>
     <div class="row-fluid" style="margin-top: 10px">
         <div class="scroller"
@@ -114,6 +117,30 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary text-center" id="saveStaffBtn">保存</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal" id="closeModal" >关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" id="allocateRole-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" style="width: 50%;background: #fff; margin:30px auto;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="modal-allocateRole-title">分配角色</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row-fluid" style="margin-top: 10px">
+                        <div class="scroller"
+                             data-always-visible="1" data-rail-visible1="0"
+                             data-handle-color="#D7DCE2">
+                            <ul id="treeRole" class="ztree"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary text-center" id="saveStaffRoleBtn">保存</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="close" >关闭</button>
                 </div>
             </div>
         </div>

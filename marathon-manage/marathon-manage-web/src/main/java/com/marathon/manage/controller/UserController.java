@@ -1,11 +1,24 @@
 package com.marathon.manage.controller;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+import com.marathon.manage.mapper.SysRoleInfoMapper;
+import com.marathon.manage.mapper.SysRolePermissionMapper;
+import com.marathon.manage.mapper.SysUserRoleMapper;
+import com.marathon.manage.pojo.SysRoleInfo;
+import com.marathon.manage.pojo.SysUserRoleKey;
 import com.marathon.manage.pojo.UserInfo;
+import com.marathon.manage.qvo.AddUserRoleQO;
+import com.marathon.manage.service.SysRoleService;
 import com.marathon.manage.service.UserInfoService;
+import com.marathon.manage.vo.CommonTreeVO;
 import com.marathon.manage.vo.JSONResult;
+import com.sun.istack.internal.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created by cui on 2017/5/27.
@@ -15,6 +28,12 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private UserInfoService userInfoService;
+
+    @Autowired
+    private SysRoleInfoMapper sysRoleMapper;
+
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
 
     @RequestMapping("add")
     @ResponseBody
@@ -43,5 +62,49 @@ public class UserController {
     @ResponseBody
     public UserInfo queryById(@RequestParam("userId") String userId) {
         return userInfoService.queryById(userId);
+    }
+
+    /**
+     * 查询用户所属角色列表
+     *
+     * @param sysUserId
+     * @return
+     */
+    @RequestMapping(value = "role", method = RequestMethod.GET)
+    @ResponseBody
+    public List<CommonTreeVO> queryRoles(@RequestParam("sysUserId") String sysUserId) {
+        List<CommonTreeVO> result = Lists.newArrayList();
+        List<SysRoleInfo> lstRoles = sysRoleMapper.queryAll();
+        result.addAll(Lists.transform(lstRoles, new Function<SysRoleInfo, CommonTreeVO>() {
+            @Nullable
+            @Override
+            public CommonTreeVO apply(@Nullable SysRoleInfo input) {
+                CommonTreeVO treeVO = new CommonTreeVO();
+                treeVO.setId(input.getRoleId());
+                treeVO.setName(input.getRoleName());
+                return treeVO;
+            }
+        }));
+        List<SysUserRoleKey> lstHasRoles = sysUserRoleMapper.queryByStaff(sysUserId);
+        List<String> hasRolesId = Lists.transform(lstHasRoles, new Function<SysUserRoleKey, String>() {
+            @Nullable
+            @Override
+            public String apply(@Nullable SysUserRoleKey input) {
+                return input.getRoleId();
+            }
+        });
+        for (CommonTreeVO treeVO : result) {
+            String roleId = treeVO.getId();
+            treeVO.setChecked(hasRolesId.contains(roleId));
+        }
+        return result;
+    }
+
+    @RequestMapping("saveStaffRole")
+    @ResponseBody
+    public JSONResult saveStaffRole(@RequestBody AddUserRoleQO addStaffRoleQO){
+        JSONResult result=new JSONResult();
+        userInfoService.addRole(addStaffRoleQO.getStaffId(),addStaffRoleQO.getLstRoleId());
+        return result;
     }
 }

@@ -33,4 +33,16 @@
       </if>
     </trim>
   </insert>
+
+  <select id="queryByStaff" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    *
+    from sys_user_role
+    where user_id = #{staffId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByStaff" parameterType="java.lang.String">
+    delete from sys_user_role
+    where user_id = #{staffId,jdbcType=VARCHAR}
+  </delete>
 </mapper>

@@ -2,6 +2,8 @@ package com.marathon.manage.mapper;
 
 import com.marathon.manage.pojo.SysRoleInfo;
 
+import java.util.List;
+
 public interface SysRoleInfoMapper {
     int deleteByPrimaryKey(String roleId);
 
@@ -14,4 +16,6 @@ public interface SysRoleInfoMapper {
     int updateByPrimaryKeySelective(SysRoleInfo record);
 
     int updateByPrimaryKey(SysRoleInfo record);
+
+    List<SysRoleInfo> queryAll();
 }

@@ -1,14 +1,21 @@
 package com.marathon.manage.controller;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.marathon.manage.MarathonConstants;
 import com.marathon.manage.mapper.SysMenuInfoMapper;
 import com.marathon.manage.pojo.SysMenuInfo;
+import com.marathon.manage.pojo.SysRolePermission;
 import com.marathon.manage.qvo.MenuVO;
+import com.marathon.manage.service.SysRoleService;
+import com.marathon.manage.vo.CommonTreeVO;
+import com.sun.istack.internal.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +32,9 @@ public class MenuController {
 
     @Autowired
     SysMenuInfoMapper menuInfoMapper;
+
+    @Autowired
+    private SysRoleService sysRoleService;
 
     @RequestMapping("/getMenuMenu")
     @ResponseBody
@@ -69,5 +79,47 @@ public class MenuController {
     @RequestMapping("/init")
     public String init() {
         return "welcome";
+    }
+
+    /**
+     * 获取权限树形数据
+     *
+     * @param sysRoleId 角色ID，可以为空
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "permissionTree", method = RequestMethod.GET)
+    @ResponseBody
+    public List<CommonTreeVO> permissionTree(@RequestParam(value = "sysRoleId", required = false) String sysRoleId, HttpServletRequest request) {
+        List<CommonTreeVO> result = Lists.newArrayList();
+        List<SysMenuInfo> lstMenuAll = menuInfoMapper.queryAll();
+        result.addAll(Lists.transform(lstMenuAll, new Function<SysMenuInfo, CommonTreeVO>() {
+            @Nullable
+            @Override
+            public CommonTreeVO apply(@Nullable SysMenuInfo input) {
+                CommonTreeVO treeVO = new CommonTreeVO();
+                treeVO.setId(input.getMenuId());
+                treeVO.setName(input.getMenuName());
+                treeVO.setIsParent(String.valueOf(StringUtils.isEmpty(input.getParentId())));
+                treeVO.setpId(input.getParentId());
+                return treeVO;
+            }
+        }));
+        if (StringUtils.isNotEmpty(sysRoleId)) {
+            List<SysRolePermission> lstPermission = sysRoleService.queryPermission(sysRoleId);
+            List<String> lstPermissionId = Lists.transform(lstPermission, new Function<SysRolePermission, String>() {
+                @Nullable
+                @Override
+                public String apply(@Nullable SysRolePermission input) {
+                    return input.getPermissionId();
+                }
+            });
+            for (CommonTreeVO treeVO : result) {
+                String id = treeVO.getId();
+                treeVO.setChecked(lstPermissionId.contains(id));
+            }
+        }
+
+        return result;
     }
 }
