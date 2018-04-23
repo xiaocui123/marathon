@@ -122,7 +122,7 @@ $(function () {
 
     $('#grid').on("dbl-click-row.bs.table",function(row,element,field){
         console.log(element.marathonUuid);
-        var url=path + '/marathon/activitylist/init//'+element.marathonUuid;
+        var url=path + '/marathonActivity/activitylist/init//'+element.marathonUuid;
         $('#proscenium-box').load(url);
     });
 })

@@ -2,7 +2,7 @@ package com.marathon.manage.vo;
 
 public enum ResultEnum {
     //通用错误码
-    SUCCESS("000", "成功");
+    SUCCESS("000", "成功"),ERROR("001","系统异常");
 
     // 成员变量  
     private String status;

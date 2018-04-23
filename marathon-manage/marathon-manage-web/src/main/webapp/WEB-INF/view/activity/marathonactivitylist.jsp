@@ -46,13 +46,17 @@
                 <div class="modal-body">
                     <!-- 第一行 -->
                     <div class="input-group col-xs-12" clearfix>
-                        <div class="col-xs-4">
+                        <div class="col-xs-12">
                             <div class="input-group form-group">
                                 <div class="input-group-addon">活动名称</div>
-                                <input id="marathon-name-input" type="text" class="form-control" placeholder="活动名称">
+                                <input id="activity-name-input" type="text" class="form-control" placeholder="活动名称">
                             </div>
                         </div>
-                        <div class="col-xs-4">
+                    </div>
+
+                    <!--第二行 -->
+                    <div class="input-group col-xs-12" clearfix>
+                        <div class="col-xs-6">
                             <div class="input-group form-group date form_datetime">
                                 <div class="input-group-addon">开始时间</div>
                                 <input type="text" class="form-control" id="activity_startTime">
@@ -61,7 +65,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-xs-4">
+                        <div class="col-xs-6">
                             <div class="input-group form-group date form_datetime">
                                 <div class="input-group-addon">结束时间</div>
                                 <input type="text" class="form-control" id="activity_endTime">
@@ -72,9 +76,9 @@
                         </div>
                     </div>
 
-                    <!-- 第二行 -->
+                    <!-- 第三行 -->
                     <div class="input-group col-xs-12 clearfix ">
-                        <div class="col-xs-3">
+                        <div class="col-xs-6">
                             <div class="input-group form-group">
                                 <div class="input-group-addon">责任人</div>
                                 <select class="form-control" id="activity_director">
@@ -83,26 +87,20 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-xs-3">
+                        <div class="col-xs-6">
                             <div class="input-group form-group">
                                 <div class="input-group-addon">成本</div>
                                 <input type="text" class="form-control" id="cost_budget">
                             </div>
                         </div>
-                        <div class="col-xs-3">
+                    </div>
+
+                    <!-- 第三行 -->
+                    <div class="input-group col-xs-12 clearfix ">
+                        <div class="col-xs-12">
                             <div class="input-group form-group">
-                                <div class="input-group-addon">状态</div>
-                                <select class="form-control" id="activity_status">
-                                    <option value="0">未开始</option>
-                                    <option value="1">进行中</option>
-                                    <option value="2">完成</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-xs-3">
-                            <div class="input-group form-group">
-                                <div class="input-group-addon">进度</div>
-                                <input type="text" class="form-control" id="activity_progress">
+                                <div class="input-group-addon">活动简介</div>
+                                <textarea class="form-control textareaHeight" id="activity_profile"></textarea>
                             </div>
                         </div>
                     </div>

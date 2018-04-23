@@ -110,7 +110,7 @@
     where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from marathon_activity
+    update marathon_activity ac set ac.activity_deleted = 1
     where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.marathon.manage.refactor.pojo.MarathonActivityInfo" >
