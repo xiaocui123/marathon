@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.marathon.manage.refactor.mapper.MarathonActivityClassifyMapper" >
+  <resultMap id="BaseResultMap" type="com.marathon.manage.refactor.pojo.MarathonActivityClassify" >
+    <id column="marathon_activityclassify_uuid" property="marathonActivityclassifyUuid" jdbcType="VARCHAR" />
+    <result column="marathon_id" property="marathonId" jdbcType="VARCHAR" />
+    <result column="activityclassify" property="activityclassify" jdbcType="VARCHAR" />
+    <result column="deleted_flag" property="deletedFlag" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    marathon_activityclassify_uuid, marathon_id, activityclassify, deleted_flag
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.marathon.manage.refactor.pojo.MarathonActivityClassifyExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from marathon_activityclassify
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from marathon_activityclassify
+    where marathon_activityclassify_uuid = #{marathonActivityclassifyUuid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from marathon_activityclassify
+    where marathon_activityclassify_uuid = #{marathonActivityclassifyUuid,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByMarathonId" parameterType="java.lang.String">
+    delete from marathon_activityclassify
+    where marathon_id = #{marathonUuid,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.marathon.manage.refactor.pojo.MarathonActivityClassify" >
+    insert into marathon_activityclassify (marathon_activityclassify_uuid, marathon_id, 
+      activityclassify, deleted_flag)
+    values (#{marathonActivityclassifyUuid,jdbcType=VARCHAR}, #{marathonId,jdbcType=VARCHAR}, 
+      #{activityclassify,jdbcType=VARCHAR}, #{deletedFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.marathon.manage.refactor.pojo.MarathonActivityClassify" >
+    insert into marathon_activityclassify
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="marathonActivityclassifyUuid != null" >
+        marathon_activityclassify_uuid,
+      </if>
+      <if test="marathonId != null" >
+        marathon_id,
+      </if>
+      <if test="activityclassify != null" >
+        activityclassify,
+      </if>
+      <if test="deletedFlag != null" >
+        deleted_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="marathonActivityclassifyUuid != null" >
+        #{marathonActivityclassifyUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="marathonId != null" >
+        #{marathonId,jdbcType=VARCHAR},
+      </if>
+      <if test="activityclassify != null" >
+        #{activityclassify,jdbcType=VARCHAR},
+      </if>
+      <if test="deletedFlag != null" >
+        #{deletedFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update marathon_activityclassify
+    <set >
+      <if test="record.marathonActivityclassifyUuid != null" >
+        marathon_activityclassify_uuid = #{record.marathonActivityclassifyUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.marathonId != null" >
+        marathon_id = #{record.marathonId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityclassify != null" >
+        activityclassify = #{record.activityclassify,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deletedFlag != null" >
+        deleted_flag = #{record.deletedFlag,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update marathon_activityclassify
+    set marathon_activityclassify_uuid = #{record.marathonActivityclassifyUuid,jdbcType=VARCHAR},
+      marathon_id = #{record.marathonId,jdbcType=VARCHAR},
+      activityclassify = #{record.activityclassify,jdbcType=VARCHAR},
+      deleted_flag = #{record.deletedFlag,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.marathon.manage.refactor.pojo.MarathonActivityClassify" >
+    update marathon_activityclassify
+    <set >
+      <if test="marathonId != null" >
+        marathon_id = #{marathonId,jdbcType=VARCHAR},
+      </if>
+      <if test="activityclassify != null" >
+        activityclassify = #{activityclassify,jdbcType=VARCHAR},
+      </if>
+      <if test="deletedFlag != null" >
+        deleted_flag = #{deletedFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where marathon_activityclassify_uuid = #{marathonActivityclassifyUuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.marathon.manage.refactor.pojo.MarathonActivityClassify" >
+    update marathon_activityclassify
+    set marathon_id = #{marathonId,jdbcType=VARCHAR},
+      activityclassify = #{activityclassify,jdbcType=VARCHAR},
+      deleted_flag = #{deletedFlag,jdbcType=BIT}
+    where marathon_activityclassify_uuid = #{marathonActivityclassifyUuid,jdbcType=VARCHAR}
+  </update>
+</mapper>

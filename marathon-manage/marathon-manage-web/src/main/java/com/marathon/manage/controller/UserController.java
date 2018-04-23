@@ -3,16 +3,14 @@ package com.marathon.manage.controller;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.marathon.manage.mapper.SysRoleInfoMapper;
-import com.marathon.manage.mapper.SysRolePermissionMapper;
 import com.marathon.manage.mapper.SysUserRoleMapper;
 import com.marathon.manage.pojo.SysRoleInfo;
 import com.marathon.manage.pojo.SysUserRoleKey;
 import com.marathon.manage.pojo.UserInfo;
 import com.marathon.manage.qvo.AddUserRoleQO;
-import com.marathon.manage.service.SysRoleService;
 import com.marathon.manage.service.UserInfoService;
+import com.marathon.manage.vo.BaseResultBean;
 import com.marathon.manage.vo.CommonTreeVO;
-import com.marathon.manage.vo.JSONResult;
 import com.sun.istack.internal.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,16 +42,16 @@ public class UserController {
 
     @RequestMapping("update")
     @ResponseBody
-    public JSONResult update(@RequestBody UserInfo userInfo) {
-        JSONResult result = new JSONResult();
+    public BaseResultBean update(@RequestBody UserInfo userInfo) {
+        BaseResultBean result = new BaseResultBean();
         userInfoService.update(userInfo);
         return result;
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.GET)
     @ResponseBody
-    public JSONResult delete(@RequestParam String userId) {
-        JSONResult result = new JSONResult();
+    public BaseResultBean delete(@RequestParam String userId) {
+        BaseResultBean result = new BaseResultBean();
         userInfoService.delete(userId);
         return result;
     }
@@ -102,8 +100,8 @@ public class UserController {
 
     @RequestMapping("saveStaffRole")
     @ResponseBody
-    public JSONResult saveStaffRole(@RequestBody AddUserRoleQO addStaffRoleQO){
-        JSONResult result=new JSONResult();
+    public BaseResultBean saveStaffRole(@RequestBody AddUserRoleQO addStaffRoleQO){
+        BaseResultBean result=new BaseResultBean();
         userInfoService.addRole(addStaffRoleQO.getStaffId(),addStaffRoleQO.getLstRoleId());
         return result;
     }

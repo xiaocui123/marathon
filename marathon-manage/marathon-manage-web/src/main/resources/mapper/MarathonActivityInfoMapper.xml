@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.marathon.manage.refactor.mapper.MarathonActivityInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.marathon.manage.refactor.pojo.MarathonActivityInfo" >
+    <id column="activity_uuid" property="activityUuid" jdbcType="VARCHAR" />
+    <result column="marathon_uuid" property="marathonUuid" jdbcType="VARCHAR" />
+    <result column="activity_classify" property="activityClassify" jdbcType="VARCHAR" />
+    <result column="activity_name" property="activityName" jdbcType="VARCHAR" />
+    <result column="activity_profile" property="activityProfile" jdbcType="VARCHAR" />
+    <result column="activity_plan_starttime" property="activityPlanStarttime" jdbcType="TIMESTAMP" />
+    <result column="activity_plan_endtime" property="activityPlanEndtime" jdbcType="TIMESTAMP" />
+    <result column="activity_director" property="activityDirector" jdbcType="VARCHAR" />
+    <result column="activity_cost" property="activityCost" jdbcType="DECIMAL" />
+    <result column="activity_status" property="activityStatus" jdbcType="VARCHAR" />
+    <result column="activity_progress" property="activityProgress" jdbcType="VARCHAR" />
+    <result column="activity_real_starttime" property="activityRealStarttime" jdbcType="TIMESTAMP" />
+    <result column="activity_real_endtime" property="activityRealEndtime" jdbcType="TIMESTAMP" />
+    <result column="activity_real_cost" property="activityRealCost" jdbcType="DECIMAL" />
+    <result column="activity_comments" property="activityComments" jdbcType="VARCHAR" />
+    <result column="activity_creator" property="activityCreator" jdbcType="VARCHAR" />
+    <result column="activity_createtime" property="activityCreatetime" jdbcType="TIMESTAMP" />
+    <result column="activity_updater" property="activityUpdater" jdbcType="VARCHAR" />
+    <result column="activity_updatetime" property="activityUpdatetime" jdbcType="TIMESTAMP" />
+    <result column="activity_deleted" property="activityDeleted" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    activity_uuid, marathon_uuid, activity_classify, activity_name, activity_profile, 
+    activity_plan_starttime, activity_plan_endtime, activity_director, activity_cost, 
+    activity_status, activity_progress, activity_real_starttime, activity_real_endtime, 
+    activity_real_cost, activity_comments, activity_creator, activity_createtime, activity_updater, 
+    activity_updatetime, activity_deleted
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.marathon.manage.refactor.pojo.MarathonActivityInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from marathon_activity
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from marathon_activity
+    where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from marathon_activity
+    where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.marathon.manage.refactor.pojo.MarathonActivityInfo" >
+    insert into marathon_activity (activity_uuid, marathon_uuid, activity_classify, 
+      activity_name, activity_profile, activity_plan_starttime, 
+      activity_plan_endtime, activity_director, 
+      activity_cost, activity_status, activity_progress, 
+      activity_real_starttime, activity_real_endtime, 
+      activity_real_cost, activity_comments, activity_creator, 
+      activity_createtime, activity_updater, 
+      activity_updatetime, activity_deleted)
+    values (#{activityUuid,jdbcType=VARCHAR}, #{marathonUuid,jdbcType=VARCHAR}, #{activityClassify,jdbcType=VARCHAR}, 
+      #{activityName,jdbcType=VARCHAR}, #{activityProfile,jdbcType=VARCHAR}, #{activityPlanStarttime,jdbcType=TIMESTAMP}, 
+      #{activityPlanEndtime,jdbcType=TIMESTAMP}, #{activityDirector,jdbcType=VARCHAR}, 
+      #{activityCost,jdbcType=DECIMAL}, #{activityStatus,jdbcType=VARCHAR}, #{activityProgress,jdbcType=VARCHAR}, 
+      #{activityRealStarttime,jdbcType=TIMESTAMP}, #{activityRealEndtime,jdbcType=TIMESTAMP}, 
+      #{activityRealCost,jdbcType=DECIMAL}, #{activityComments,jdbcType=VARCHAR}, #{activityCreator,jdbcType=VARCHAR}, 
+      #{activityCreatetime,jdbcType=TIMESTAMP}, #{activityUpdater,jdbcType=VARCHAR}, 
+      #{activityUpdatetime,jdbcType=TIMESTAMP}, #{activityDeleted,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.marathon.manage.refactor.pojo.MarathonActivityInfo" >
+    insert into marathon_activity
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="activityUuid != null" >
+        activity_uuid,
+      </if>
+      <if test="marathonUuid != null" >
+        marathon_uuid,
+      </if>
+      <if test="activityClassify != null" >
+        activity_classify,
+      </if>
+      <if test="activityName != null" >
+        activity_name,
+      </if>
+      <if test="activityProfile != null" >
+        activity_profile,
+      </if>
+      <if test="activityPlanStarttime != null" >
+        activity_plan_starttime,
+      </if>
+      <if test="activityPlanEndtime != null" >
+        activity_plan_endtime,
+      </if>
+      <if test="activityDirector != null" >
+        activity_director,
+      </if>
+      <if test="activityCost != null" >
+        activity_cost,
+      </if>
+      <if test="activityStatus != null" >
+        activity_status,
+      </if>
+      <if test="activityProgress != null" >
+        activity_progress,
+      </if>
+      <if test="activityRealStarttime != null" >
+        activity_real_starttime,
+      </if>
+      <if test="activityRealEndtime != null" >
+        activity_real_endtime,
+      </if>
+      <if test="activityRealCost != null" >
+        activity_real_cost,
+      </if>
+      <if test="activityComments != null" >
+        activity_comments,
+      </if>
+      <if test="activityCreator != null" >
+        activity_creator,
+      </if>
+      <if test="activityCreatetime != null" >
+        activity_createtime,
+      </if>
+      <if test="activityUpdater != null" >
+        activity_updater,
+      </if>
+      <if test="activityUpdatetime != null" >
+        activity_updatetime,
+      </if>
+      <if test="activityDeleted != null" >
+        activity_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="activityUuid != null" >
+        #{activityUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="marathonUuid != null" >
+        #{marathonUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="activityClassify != null" >
+        #{activityClassify,jdbcType=VARCHAR},
+      </if>
+      <if test="activityName != null" >
+        #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityProfile != null" >
+        #{activityProfile,jdbcType=VARCHAR},
+      </if>
+      <if test="activityPlanStarttime != null" >
+        #{activityPlanStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityPlanEndtime != null" >
+        #{activityPlanEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityDirector != null" >
+        #{activityDirector,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCost != null" >
+        #{activityCost,jdbcType=DECIMAL},
+      </if>
+      <if test="activityStatus != null" >
+        #{activityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="activityProgress != null" >
+        #{activityProgress,jdbcType=VARCHAR},
+      </if>
+      <if test="activityRealStarttime != null" >
+        #{activityRealStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityRealEndtime != null" >
+        #{activityRealEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityRealCost != null" >
+        #{activityRealCost,jdbcType=DECIMAL},
+      </if>
+      <if test="activityComments != null" >
+        #{activityComments,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCreator != null" >
+        #{activityCreator,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCreatetime != null" >
+        #{activityCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityUpdater != null" >
+        #{activityUpdater,jdbcType=VARCHAR},
+      </if>
+      <if test="activityUpdatetime != null" >
+        #{activityUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityDeleted != null" >
+        #{activityDeleted,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update marathon_activity
+    <set >
+      <if test="record.activityUuid != null" >
+        activity_uuid = #{record.activityUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.marathonUuid != null" >
+        marathon_uuid = #{record.marathonUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityClassify != null" >
+        activity_classify = #{record.activityClassify,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityName != null" >
+        activity_name = #{record.activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityProfile != null" >
+        activity_profile = #{record.activityProfile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityPlanStarttime != null" >
+        activity_plan_starttime = #{record.activityPlanStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.activityPlanEndtime != null" >
+        activity_plan_endtime = #{record.activityPlanEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.activityDirector != null" >
+        activity_director = #{record.activityDirector,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityCost != null" >
+        activity_cost = #{record.activityCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.activityStatus != null" >
+        activity_status = #{record.activityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityProgress != null" >
+        activity_progress = #{record.activityProgress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityRealStarttime != null" >
+        activity_real_starttime = #{record.activityRealStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.activityRealEndtime != null" >
+        activity_real_endtime = #{record.activityRealEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.activityRealCost != null" >
+        activity_real_cost = #{record.activityRealCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.activityComments != null" >
+        activity_comments = #{record.activityComments,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityCreator != null" >
+        activity_creator = #{record.activityCreator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityCreatetime != null" >
+        activity_createtime = #{record.activityCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.activityUpdater != null" >
+        activity_updater = #{record.activityUpdater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityUpdatetime != null" >
+        activity_updatetime = #{record.activityUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.activityDeleted != null" >
+        activity_deleted = #{record.activityDeleted,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update marathon_activity
+    set activity_uuid = #{record.activityUuid,jdbcType=VARCHAR},
+      marathon_uuid = #{record.marathonUuid,jdbcType=VARCHAR},
+      activity_classify = #{record.activityClassify,jdbcType=VARCHAR},
+      activity_name = #{record.activityName,jdbcType=VARCHAR},
+      activity_profile = #{record.activityProfile,jdbcType=VARCHAR},
+      activity_plan_starttime = #{record.activityPlanStarttime,jdbcType=TIMESTAMP},
+      activity_plan_endtime = #{record.activityPlanEndtime,jdbcType=TIMESTAMP},
+      activity_director = #{record.activityDirector,jdbcType=VARCHAR},
+      activity_cost = #{record.activityCost,jdbcType=DECIMAL},
+      activity_status = #{record.activityStatus,jdbcType=VARCHAR},
+      activity_progress = #{record.activityProgress,jdbcType=VARCHAR},
+      activity_real_starttime = #{record.activityRealStarttime,jdbcType=TIMESTAMP},
+      activity_real_endtime = #{record.activityRealEndtime,jdbcType=TIMESTAMP},
+      activity_real_cost = #{record.activityRealCost,jdbcType=DECIMAL},
+      activity_comments = #{record.activityComments,jdbcType=VARCHAR},
+      activity_creator = #{record.activityCreator,jdbcType=VARCHAR},
+      activity_createtime = #{record.activityCreatetime,jdbcType=TIMESTAMP},
+      activity_updater = #{record.activityUpdater,jdbcType=VARCHAR},
+      activity_updatetime = #{record.activityUpdatetime,jdbcType=TIMESTAMP},
+      activity_deleted = #{record.activityDeleted,jdbcType=TINYINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.marathon.manage.refactor.pojo.MarathonActivityInfo" >
+    update marathon_activity
+    <set >
+      <if test="marathonUuid != null" >
+        marathon_uuid = #{marathonUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="activityClassify != null" >
+        activity_classify = #{activityClassify,jdbcType=VARCHAR},
+      </if>
+      <if test="activityName != null" >
+        activity_name = #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityProfile != null" >
+        activity_profile = #{activityProfile,jdbcType=VARCHAR},
+      </if>
+      <if test="activityPlanStarttime != null" >
+        activity_plan_starttime = #{activityPlanStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityPlanEndtime != null" >
+        activity_plan_endtime = #{activityPlanEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityDirector != null" >
+        activity_director = #{activityDirector,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCost != null" >
+        activity_cost = #{activityCost,jdbcType=DECIMAL},
+      </if>
+      <if test="activityStatus != null" >
+        activity_status = #{activityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="activityProgress != null" >
+        activity_progress = #{activityProgress,jdbcType=VARCHAR},
+      </if>
+      <if test="activityRealStarttime != null" >
+        activity_real_starttime = #{activityRealStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityRealEndtime != null" >
+        activity_real_endtime = #{activityRealEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityRealCost != null" >
+        activity_real_cost = #{activityRealCost,jdbcType=DECIMAL},
+      </if>
+      <if test="activityComments != null" >
+        activity_comments = #{activityComments,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCreator != null" >
+        activity_creator = #{activityCreator,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCreatetime != null" >
+        activity_createtime = #{activityCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityUpdater != null" >
+        activity_updater = #{activityUpdater,jdbcType=VARCHAR},
+      </if>
+      <if test="activityUpdatetime != null" >
+        activity_updatetime = #{activityUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityDeleted != null" >
+        activity_deleted = #{activityDeleted,jdbcType=TINYINT},
+      </if>
+    </set>
+    where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.marathon.manage.refactor.pojo.MarathonActivityInfo" >
+    update marathon_activity
+    set marathon_uuid = #{marathonUuid,jdbcType=VARCHAR},
+      activity_classify = #{activityClassify,jdbcType=VARCHAR},
+      activity_name = #{activityName,jdbcType=VARCHAR},
+      activity_profile = #{activityProfile,jdbcType=VARCHAR},
+      activity_plan_starttime = #{activityPlanStarttime,jdbcType=TIMESTAMP},
+      activity_plan_endtime = #{activityPlanEndtime,jdbcType=TIMESTAMP},
+      activity_director = #{activityDirector,jdbcType=VARCHAR},
+      activity_cost = #{activityCost,jdbcType=DECIMAL},
+      activity_status = #{activityStatus,jdbcType=VARCHAR},
+      activity_progress = #{activityProgress,jdbcType=VARCHAR},
+      activity_real_starttime = #{activityRealStarttime,jdbcType=TIMESTAMP},
+      activity_real_endtime = #{activityRealEndtime,jdbcType=TIMESTAMP},
+      activity_real_cost = #{activityRealCost,jdbcType=DECIMAL},
+      activity_comments = #{activityComments,jdbcType=VARCHAR},
+      activity_creator = #{activityCreator,jdbcType=VARCHAR},
+      activity_createtime = #{activityCreatetime,jdbcType=TIMESTAMP},
+      activity_updater = #{activityUpdater,jdbcType=VARCHAR},
+      activity_updatetime = #{activityUpdatetime,jdbcType=TIMESTAMP},
+      activity_deleted = #{activityDeleted,jdbcType=TINYINT}
+    where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+  </update>
+</mapper>

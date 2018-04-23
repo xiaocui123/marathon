@@ -31,7 +31,7 @@ function login() {
                 userPsw: staff_pwd
             },
             success: function (data) {
-                if (!data.success) {
+                if (data.status!="000") {
                     bootbox.alert(data.message)
                 } else {
                     window.location.href = path + "/sys/gotoSys";

@@ -9,7 +9,7 @@ import com.marathon.manage.qvo.MediaActivityQO;
 import com.marathon.manage.service.FileResourceService;
 import com.marathon.manage.service.MarathonInfoService;
 import com.marathon.manage.service.MediaActivityService;
-import com.marathon.manage.vo.JSONResult;
+import com.marathon.manage.vo.BaseResultBean;
 import com.marathon.manage.vo.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -64,8 +64,8 @@ public class MediaActivityController {
 
     @RequestMapping("/add")
     @ResponseBody
-    public JSONResult add(@RequestBody AddMediaActivityQO qo, HttpServletRequest request) {
-        JSONResult result = new JSONResult();
+    public BaseResultBean add(@RequestBody AddMediaActivityQO qo, HttpServletRequest request) {
+        BaseResultBean result = new BaseResultBean();
         MarathonMediaActivity activity = qo;
         String activityId = UUID.randomUUID().toString();
         activity.setMediaActivityUuid(activityId);
@@ -83,8 +83,8 @@ public class MediaActivityController {
 
     @RequestMapping("update")
     @ResponseBody
-    public JSONResult update(@RequestBody MarathonMediaActivity activity,HttpServletRequest request){
-        JSONResult result=new JSONResult();
+    public BaseResultBean update(@RequestBody MarathonMediaActivity activity,HttpServletRequest request){
+        BaseResultBean result=new BaseResultBean();
         String userId= (String) request.getSession().getAttribute(MarathonConstants.SYSTEM_USER_ID);
         activity.setMediaActivityUpdater(userId);
         activity.setMediaActivityUpdatetime(new Date());
@@ -100,8 +100,8 @@ public class MediaActivityController {
 
     @RequestMapping("/delete")
     @ResponseBody
-    public JSONResult delete(@RequestBody List<String> arrayActivityId){
-        JSONResult result=new JSONResult();
+    public BaseResultBean delete(@RequestBody List<String> arrayActivityId){
+        BaseResultBean result=new BaseResultBean();
         mediaActivityService.deleteActivity(arrayActivityId);
         return result;
     }

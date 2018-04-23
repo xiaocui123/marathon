@@ -1,10 +1,5 @@
 package com.marathon.manage.pojo;
 
-import com.google.common.base.MoreObjects;
-import com.marathon.manage.utils.DateUtils;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MarathonInfo {
@@ -14,11 +9,7 @@ public class MarathonInfo {
 
     private Date marathonStarttime;
 
-    private String marathonStarttimeStr;
-
     private Date marathonEndtime;
-
-    private String marathonEndtimeStr;
 
     private String marathonAddress;
 
@@ -26,13 +17,13 @@ public class MarathonInfo {
 
     private Date marathonCreatetime;
 
-    private String marathonCreatetimeStr;
-
     private String marathonUpdater;
 
     private Date marathonUpdatetime;
 
     private Byte marathonDeleted;
+
+    private String marathonComment;
 
     public String getMarathonUuid() {
         return marathonUuid;
@@ -114,38 +105,11 @@ public class MarathonInfo {
         this.marathonDeleted = marathonDeleted;
     }
 
-    public String getMarathonStarttimeStr() {
-        this.marathonStarttimeStr = DateUtils.convert(marathonStarttime);
-        return marathonStarttimeStr;
+    public String getMarathonComment() {
+        return marathonComment;
     }
 
-    public void setMarathonStarttimeStr(String marathonStarttimeStr) {
-        this.marathonStarttimeStr = marathonStarttimeStr;
-        this.marathonStarttime = DateUtils.convert(marathonStarttimeStr);
-
-    }
-
-    public String getMarathonEndtimeStr() {
-        this.marathonEndtimeStr = DateUtils.convert(marathonEndtime);
-        return marathonEndtimeStr;
-    }
-
-    public void setMarathonEndtimeStr(String marathonEndtimeStr) {
-        this.marathonEndtimeStr = marathonEndtimeStr;
-        this.marathonEndtime = DateUtils.convert(marathonEndtimeStr);
-    }
-
-    public String getMarathonCreatetimeStr() {
-        marathonCreatetimeStr = DateUtils.convert(marathonCreatetime);
-        return marathonCreatetimeStr;
-    }
-
-    public void setMarathonCreatetimeStr(String marathonCreatetimeStr) {
-        this.marathonCreatetimeStr = marathonCreatetimeStr;
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this).add("marathonName", marathonName).toString();
+    public void setMarathonComment(String marathonComment) {
+        this.marathonComment = marathonComment == null ? null : marathonComment.trim();
     }
 }

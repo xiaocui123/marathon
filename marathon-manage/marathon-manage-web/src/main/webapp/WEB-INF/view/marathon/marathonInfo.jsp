@@ -4,6 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <link href="${ctx}/js/plugins/bootstraptable/bootstrap-table.css" rel="stylesheet" type="text/css"/>
+
 <script type="text/javascript">
     var path = "${ctx}";
 </script>
@@ -13,9 +14,13 @@
             <li class="active"><a href="#">赛事管理</a></li>
         </ul>
     </div>
-    <div id="toolbar" class="btn-group" style="margin-top: 10px">
-        <button type="button" class="btn btn-danger" id="marathon-add-btn">
+    <div style="margin-top: 10px">
+        <button type="button" class="btn btn-default" id="marathon-add-btn">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>创建赛事</button>
+        <button type="button" class="btn btn-default" id="marathon-update-btn">
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改赛事</button>
+        <button type="button" class="btn btn-danger" id="marathon-delete-btn">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除赛事</button>
     </div>
 
     <div class="row-fluid">
@@ -23,7 +28,8 @@
     </div>
     <!-- 添加通讯录模态框 -->
     <div class="modal" id="create-marathon-modal" style="overflow-y: auto;">
-        <div class="modal-dialog">
+        <div class="modal-dialog"
+            style="width: 70%; background: #fff; margin: 30px auto;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
@@ -32,10 +38,14 @@
                 </div>
                 <div class="modal-body">
                     <!-- 第一行 -->
-                        <div class="input-group form-group">
-                            <div class="input-group-addon">赛事名称</div>
-                            <input id="marathon-name-input" type="text" class="form-control" placeholder="赛事名称">
+                    <div class="input-group col-xs-12" clearfix>
+                        <div class="col-xs-12">
+                            <div class="input-group form-group">
+                                <div class="input-group-addon">赛事名称</div>
+                                <input id="marathon-name-input" type="text" class="form-control" placeholder="赛事名称">
+                            </div>
                         </div>
+                    </div>
 
                     <!-- 第二行 -->
                     <div class="input-group col-xs-12 clearfix ">
@@ -59,10 +69,40 @@
                         </div>
                     </div>
 
+                    <!--第三行 -->
                     <div class="input-group col-xs-12 clearfix ">
+                        <div class="col-xs-12">
+                            <div class="input-group form-group">
+                                <div class="input-group-addon">举办地址</div>
+                                <input id="marathon-address-input" type="text" class="form-control" placeholder="赛事举办地址">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--第四行 -->
+                    <div class="col-xs-12">
                         <div class="input-group form-group">
-                            <div class="input-group-addon">举办地址</div>
-                            <input id="marathon-address-input" type="text" class="form-control" placeholder="赛事举办地址">
+                            <div class="input-group-addon hzp161024_borderR">选择业务口</div>
+                            <div class="hzp161018_box">
+                                <span class="hzp161018_tdbox">
+                                    <input type="checkbox" name="coSponsors" value="370202" >
+                                </span>市南区
+                            </div>
+                            <div class="hzp161018_box">
+                                <span class="hzp161018_tdbox">
+                                    <input type="checkbox" name="coSponsors" value="370203" >
+                                </span>市北区
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 第 五行 -->
+                    <div class="input-group col-xs-12 clearfix ">
+                        <div class="col-xs-12">
+                            <div class="input-group form-group">
+                                <div class="input-group-addon">赛事描述</div>
+                                <textarea class="form-control textareaHeight" id="marathon_comment"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>

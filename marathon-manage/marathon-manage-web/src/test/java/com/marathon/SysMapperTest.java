@@ -2,6 +2,8 @@ package com.marathon;
 
 import com.marathon.manage.mapper.*;
 import com.marathon.manage.pojo.*;
+import com.marathon.manage.refactor.mapper.SysDictInfoMapper;
+import com.marathon.manage.refactor.pojo.SysDictInfoExample;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,6 +28,9 @@ public class SysMapperTest extends AbstractSpringTest {
 
     @Autowired
     private UserInfoMapper userInfoMapper;
+
+    @Autowired
+    private SysDictInfoMapper sysDictInfoMapper;
 
     @Test
     public void initMenu(){
@@ -123,5 +128,12 @@ public class SysMapperTest extends AbstractSpringTest {
         mediaRolePermission.setRoleId("277b3350-b289-47c3-a0eb-138d3bd79093");
         mediaRolePermission.setPermissionId("53fd4c51-0f32-4654-be17-3d88067f5225");
         rolePermissionMapper.insert(mediaRolePermission);
+    }
+
+    @Test
+    public void testSysDict(){
+
+        SysDictInfoExample example=new SysDictInfoExample();
+        System.out.println(sysDictInfoMapper.selectByExample(example).size());
     }
 }

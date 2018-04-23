@@ -2,7 +2,8 @@ package com.marathon.manage.controller;
 
 import com.marathon.manage.pojo.ActivityFileResource;
 import com.marathon.manage.service.FileResourceService;
-import com.marathon.manage.vo.JSONResult;
+import com.marathon.manage.vo.BaseResultBean;
+import com.marathon.manage.vo.ResultEnum;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,14 +67,13 @@ public class FileResourceController {
 
     @RequestMapping("/deleteFile")
     @ResponseBody
-    public JSONResult deleteFile(@RequestBody ActivityFileResource fileResource) {
-        JSONResult result = new JSONResult();
+    public BaseResultBean deleteFile(@RequestBody ActivityFileResource fileResource) {
+        BaseResultBean result = new BaseResultBean();
         try {
             Files.deleteIfExists(Paths.get(fileResource.getFileResourceUrl()));
             fileResourceService.delete(fileResource.getFileResourceId());
         } catch (IOException e) {
-            result.setSuccess(false);
-            result.setMessage(e.getMessage());
+            result.setEnum(ResultEnum.SUCCESS);
         }
         return result;
     }

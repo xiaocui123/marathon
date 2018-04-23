@@ -34,4 +34,5 @@ public class MediaActivityServiceTest extends AbstractSpringTest {
         List<MarathonMediaActivity> lstActivity = mediaActivityService.queryActivityByMarathon("1b400f25-3843-40ad-8687-f16ffeb53f9f", "0", page);
         System.out.println(lstActivity.size());
     }
+
 }

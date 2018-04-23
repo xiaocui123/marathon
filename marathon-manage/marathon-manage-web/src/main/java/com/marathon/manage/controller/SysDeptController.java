@@ -3,7 +3,7 @@ package com.marathon.manage.controller;
 import com.marathon.manage.pojo.DeptUserTreeVO;
 import com.marathon.manage.pojo.SysDeptInfo;
 import com.marathon.manage.service.SysDeptInfoService;
-import com.marathon.manage.vo.JSONResult;
+import com.marathon.manage.vo.BaseResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -33,16 +33,16 @@ public class SysDeptController {
 
     @RequestMapping("update")
     @ResponseBody
-    public JSONResult udpate(@RequestBody SysDeptInfo sysDeptInfo) {
-        JSONResult result = new JSONResult();
+    public BaseResultBean udpate(@RequestBody SysDeptInfo sysDeptInfo) {
+        BaseResultBean result = new BaseResultBean();
         sysDeptInfoService.update(sysDeptInfo);
         return result;
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.GET)
     @ResponseBody
-    public JSONResult delete(@RequestParam("deptId") String deptId) {
-        JSONResult result = new JSONResult();
+    public BaseResultBean delete(@RequestParam("deptId") String deptId) {
+        BaseResultBean result = new BaseResultBean();
         sysDeptInfoService.delete(deptId);
         return result;
     }

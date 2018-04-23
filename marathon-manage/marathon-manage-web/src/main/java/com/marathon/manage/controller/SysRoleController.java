@@ -8,7 +8,7 @@ import com.marathon.manage.pojo.SysRoleInfo;
 import com.marathon.manage.pojo.SysRolePermission;
 import com.marathon.manage.qvo.SysRoleQVO;
 import com.marathon.manage.service.SysRoleService;
-import com.marathon.manage.vo.JSONResult;
+import com.marathon.manage.vo.BaseResultBean;
 import com.marathon.manage.vo.Page;
 import com.sun.istack.internal.Nullable;
 import org.springframework.beans.BeanUtils;
@@ -66,24 +66,24 @@ public class SysRoleController {
 
     @RequestMapping("add")
     @ResponseBody
-    public JSONResult add(@RequestBody SysRoleQVO sysRoleQVO, HttpServletRequest request) {
-        JSONResult result = new JSONResult();
+    public BaseResultBean add(@RequestBody SysRoleQVO sysRoleQVO, HttpServletRequest request) {
+        BaseResultBean result = new BaseResultBean();
         sysRoleService.add(sysRoleQVO, sysRoleQVO.getLstPermissionId());
         return result;
     }
 
     @RequestMapping("update")
     @ResponseBody
-    public JSONResult update(@RequestBody SysRoleQVO sysRoleQVO, HttpServletRequest request) {
-        JSONResult result = new JSONResult();
+    public BaseResultBean update(@RequestBody SysRoleQVO sysRoleQVO, HttpServletRequest request) {
+        BaseResultBean result = new BaseResultBean();
         sysRoleService.update(sysRoleQVO, sysRoleQVO.getLstPermissionId());
         return result;
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.GET)
     @ResponseBody
-    public JSONResult delete(@RequestParam("sysRoleId") String sysRoleId) {
-        JSONResult result = new JSONResult();
+    public BaseResultBean delete(@RequestParam("sysRoleId") String sysRoleId) {
+        BaseResultBean result = new BaseResultBean();
         sysRoleService.delete(sysRoleId);
         return result;
     }
