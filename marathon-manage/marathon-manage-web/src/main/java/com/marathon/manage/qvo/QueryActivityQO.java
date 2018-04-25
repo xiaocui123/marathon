@@ -13,6 +13,8 @@ public class QueryActivityQO {
     private int rows;
 
     private String marathonId;
+    //是否是执行人
+    private boolean user;
 
     public int getPage() {
         return page;
@@ -36,6 +38,14 @@ public class QueryActivityQO {
 
     public void setMarathonId(String marathonId) {
         this.marathonId = marathonId;
+    }
+
+    public boolean isUser() {
+        return user;
+    }
+
+    public void setUser(boolean user) {
+        this.user = user;
     }
 
     public Map<String, Object> toMap() {

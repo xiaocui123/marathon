@@ -1,5 +1,7 @@
 package com.marathon.manage.refactor.pojo;
 
+import com.marathon.manage.utils.DateUtils;
+
 import java.util.Date;
 
 public class MarathonActivityInfo {
@@ -14,8 +16,10 @@ public class MarathonActivityInfo {
     private String activityProfile;
 
     private Date activityPlanStarttime;
+    private String activityPlanStarttimeStr;
 
     private Date activityPlanEndtime;
+    private String activityPlanEndtimeStr;
 
     private String activityDirector;
 
@@ -26,8 +30,10 @@ public class MarathonActivityInfo {
     private String activityProgress;
 
     private Date activityRealStarttime;
+    private String activityRealStarttimeStr;
 
     private Date activityRealEndtime;
+    private String activityRealEndtimeStr;
 
     private Long activityRealCost;
 
@@ -89,6 +95,7 @@ public class MarathonActivityInfo {
 
     public void setActivityPlanStarttime(Date activityPlanStarttime) {
         this.activityPlanStarttime = activityPlanStarttime;
+        this.activityPlanStarttimeStr = DateUtils.convert(activityPlanStarttime);
     }
 
     public Date getActivityPlanEndtime() {
@@ -96,7 +103,9 @@ public class MarathonActivityInfo {
     }
 
     public void setActivityPlanEndtime(Date activityPlanEndtime) {
+
         this.activityPlanEndtime = activityPlanEndtime;
+        this.activityPlanEndtimeStr = DateUtils.convert(activityPlanEndtime);
     }
 
     public String getActivityDirector() {
@@ -137,6 +146,7 @@ public class MarathonActivityInfo {
 
     public void setActivityRealStarttime(Date activityRealStarttime) {
         this.activityRealStarttime = activityRealStarttime;
+        this.activityRealStarttimeStr = DateUtils.convert(activityRealStarttime);
     }
 
     public Date getActivityRealEndtime() {
@@ -145,6 +155,7 @@ public class MarathonActivityInfo {
 
     public void setActivityRealEndtime(Date activityRealEndtime) {
         this.activityRealEndtime = activityRealEndtime;
+        this.activityRealEndtimeStr = DateUtils.convert(activityRealEndtime);
     }
 
     public Long getActivityRealCost() {
@@ -201,5 +212,41 @@ public class MarathonActivityInfo {
 
     public void setActivityDeleted(Byte activityDeleted) {
         this.activityDeleted = activityDeleted;
+    }
+
+    public String getActivityPlanStarttimeStr() {
+        return activityPlanStarttimeStr;
+    }
+
+    public void setActivityPlanStarttimeStr(String activityPlanStarttimeStr) {
+        this.activityPlanStarttimeStr = activityPlanStarttimeStr;
+        this.activityPlanStarttime = DateUtils.convert(activityPlanStarttimeStr);
+    }
+
+    public String getActivityPlanEndtimeStr() {
+        return activityPlanEndtimeStr;
+    }
+
+    public void setActivityPlanEndtimeStr(String activityPlanEndtimeStr) {
+        this.activityPlanEndtimeStr = activityPlanEndtimeStr;
+        this.activityPlanEndtime = DateUtils.convert(activityPlanEndtimeStr);
+    }
+
+    public String getActivityRealStarttimeStr() {
+        return activityRealStarttimeStr;
+    }
+
+    public void setActivityRealStarttimeStr(String activityRealStarttimeStr) {
+        this.activityRealStarttimeStr = activityRealStarttimeStr;
+        this.activityRealStarttime = DateUtils.convert(activityRealStarttimeStr);
+    }
+
+    public String getActivityRealEndtimeStr() {
+        return activityRealEndtimeStr;
+    }
+
+    public void setActivityRealEndtimeStr(String activityRealEndtimeStr) {
+        this.activityRealEndtimeStr = activityRealEndtimeStr;
+        this.activityRealEndtime = DateUtils.convert(activityRealEndtimeStr);
     }
 }

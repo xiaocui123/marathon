@@ -222,6 +222,7 @@
     SELECT
     <include refid="Base_Column_List"/>
     FROM marathon_info
+    WHERE marathon_deleted = 0
     ORDER BY marathon_name
   </select>
 
@@ -237,5 +238,8 @@
     LEFT JOIN marathon_activity activity ON classify.marathon_id = activity.marathon_uuid
     AND classify.activityclassify = activity.activity_classify
     WHERE marathon_id = #{marathonId,jdbcType=VARCHAR}
+    <if test="userId != null">
+      AND activity_director=#{userId,jdbcType=VARCHAR}
+    </if>
   </select>
 </mapper>

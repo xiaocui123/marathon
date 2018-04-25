@@ -55,7 +55,13 @@ public class MarathonActivityController {
     public Map<String, Object> queryActivites(QueryActivityQO qo, HttpServletRequest request) {
         Map<String, Object> mapResult = Maps.newConcurrentMap();
 
-        Map<String, Object> queryResult = marathonInfoService.queryClassifyActivities(qo.toMap());
+        Map<String,Object> mapParam=qo.toMap();
+        if(qo.isUser()){
+            String userId = (String) request.getSession().getAttribute(MarathonConstants.SYSTEM_USER_ID);
+            mapParam.put("userId",userId);
+        }
+
+        Map<String, Object> queryResult = marathonInfoService.queryClassifyActivities(mapParam);
 
         mapResult.put("total", queryResult.get("total"));
 
@@ -72,6 +78,7 @@ public class MarathonActivityController {
             if (classifyActivitysInfo.getLstActivity().size() > 0) {
                 for (MarathonActivityInfo activityInfo : classifyActivitysInfo.getLstActivity()) {
                     MarathonActivityVO child = new MarathonActivityVO();
+                    child.setId(activityInfo.getActivityUuid());
                     child.setName(activityInfo.getActivityName());
                     child.setActivityDirector(activityInfo.getActivityDirector());
                     child.setActivityPlanStarttime(DateUtils.convert(activityInfo.getActivityPlanStarttime()));
@@ -94,6 +101,7 @@ public class MarathonActivityController {
 
         String userId = (String) request.getSession().getAttribute(MarathonConstants.SYSTEM_USER_ID);
         activityInfo.setActivityCreator(userId);
+        activityInfo.setActivityStatus("0");
 
         activityInfo.setActivityUuid(UUID.randomUUID().toString());
         try {

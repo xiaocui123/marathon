@@ -75,7 +75,6 @@ public class MarathonInfoController {
 
         Page<MarathonExtendInfo> pageExtend = new Page<>();
         BeanUtils.copyProperties(page, pageExtend, "rows");
-        System.out.println(pageExtend);
 
         List<MarathonInfo> lstMarathonInfo = page.getRows();
         List<MarathonExtendInfo> lstMarathonExtend = Lists.transform(lstMarathonInfo, new Function<MarathonInfo, MarathonExtendInfo>() {

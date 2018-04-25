@@ -114,12 +114,13 @@ function query() {
 
 function gridBtnUpdate(activityId) {
     var activity = $('#_grid').treegrid('find', activityId);
+    console.log(activity);
 
     $('#create-activity-modal').data("activity", activity);
 
-    $('#activity-name-input').val(activity.activityName);
-    $('#activity_startTime').val(activity.activityStarttimeStr);
-    $('#activity_endTime').val(activity.activityEndtimeStr);
+    $('#activity-name-input').val(activity.name);
+    $('#activity_startTime').val(activity.activityStarttime);
+    $('#activity_endTime').val(activity.activityEndtime);
     $('#activity_director').val(activity.activityDirector);
     $('#cost_budget').val(activity.activityCost);
     $('#activity_profile').val(activity.activityProfile);
@@ -151,8 +152,8 @@ function saveActivity() {
             marathonUuid: marathonUuid,
             activityClassify: activityClassify,
             activityName: $.trim($('#activity-name-input').val()),
-            activityPlanStarttime: $.trim($('#activity_startTime').val()),
-            activityPlanEndtime: $.trim($('#activity_endTime').val()),
+            activityPlanStarttimeStr: $.trim($('#activity_startTime').val()),
+            activityPlanEndtimeStr: $.trim($('#activity_endTime').val()),
             activityDirector: $.trim($('#activity_director').val()),
             activityCost: $.trim($('#cost_budget').val()),
             activityComments: $.trim($('#activity_profile').val())
@@ -165,12 +166,12 @@ function saveActivity() {
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify(activity),
             success: function (response) {
-                if (response != '000') {
+                if (response.status != '000') {
                     bootbox.alert(response.statusDesc);
                 } else {
                     bootbox.alert("添加赛事活动成功！", function () {
                         $('#create-activity-modal').modal('hide');
-                        $("#grid").bootstrapTable('refresh');
+                        $('#_grid').treegrid('reload');
                     });
                 }
             },
@@ -204,7 +205,7 @@ function saveActivity() {
                 } else {
                     bootbox.alert("修改赛事活动成功！", function () {
                         $('#create-activity-modal').modal('hide');
-                        $("#grid").bootstrapTable('refresh');
+                        $('#_grid').treegrid('reload');
                     });
                 }
             },
@@ -222,7 +223,7 @@ function gridBtnDel(activityId) {
             bootbox.alert(response.message);
         } else {
             bootbox.alert("删除赛事活动成功！", function () {
-                $("#grid").bootstrapTable('refresh');
+                $('#_grid').treegrid('reload');
             });
         }
     });
