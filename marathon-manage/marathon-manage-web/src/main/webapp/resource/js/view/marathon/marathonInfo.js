@@ -160,7 +160,7 @@ function updateMarathon(){
             $("[value="+classify+"]:checkbox").prop("checked",true);
         });
 
-        $('#modal-title').html("修改活动");
+        $('#modal-title').html("修改赛事");
         $('#create-marathon-modal').modal("show");
 
     });

@@ -23,4 +23,6 @@ public interface MarathonActivityInfoMapper {
     int updateByPrimaryKeySelective(MarathonActivityInfo record);
 
     int updateByPrimaryKey(MarathonActivityInfo record);
+
+    void deleteByMarathonId(String marathonUuid);
 }

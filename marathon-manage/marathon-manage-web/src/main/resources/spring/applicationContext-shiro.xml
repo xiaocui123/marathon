@@ -19,6 +19,7 @@
 				/resource/** = anon
 				/old_resource/** = anon
 				/sys/login = anon
+				/volunteer/** = anon
 				/** = authc
 			</value>
 		</property>

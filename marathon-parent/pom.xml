@@ -13,7 +13,6 @@
     <description>
         一个简单SpringMVC+Spring+Mybatis整理项目
     </description>
-    <url>http://code.YouMeek.com/</url>
 
 
     <!-- 集中定义公用的依赖版本号 -->
@@ -29,9 +28,9 @@
 
         <!--2016-02-20切换到spring3试试-->
         <!--mybatis官网：http://blog.mybatis.org/2016/02/mybatis-331-and-mybatis-spring-124.html,在2016-02-13发布了3.3.1版本-->
-        <spring.version>3.2.16.RELEASE</spring.version>
-        <mybatis.version>3.3.1</mybatis.version>
-        <mybatis-spring.version>1.2.4</mybatis-spring.version>
+        <spring.version>4.1.6.RELEASE</spring.version>
+        <mybatis.version>3.2.4</mybatis.version>
+        <mybatis-spring.version>1.2.2</mybatis-spring.version>
 
 
         <!--下面这两个是springAOP需要用到-->
@@ -41,7 +40,8 @@
 
         <junit.version>4.11</junit.version>
         <mysql-connector.version>5.1.21</mysql-connector.version>
-        <druid.version>1.0.4</druid.version>
+        <mssql-jdbc.version>4.0</mssql-jdbc.version>
+        <druid.version>1.0.5</druid.version>
 
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
@@ -235,6 +235,14 @@
                 <scope>runtime</scope>
             </dependency>
 
+            <!-- sqlserver驱动 -->
+            <dependency>
+                <groupId>com.microsoft.sqlserver</groupId>
+                <artifactId>sqljdbc4</artifactId>
+                <version>${mssql-jdbc.version}</version>
+            </dependency>
+
+
             <dependency>
                 <!--这个组件具体可以看这里介绍:http://www.oschina.net/p/druid-->
                 <groupId>com.alibaba</groupId>
@@ -365,6 +373,11 @@
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper</artifactId>
                 <version>${pagehelper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.3</version>
             </dependency>
 
 
@@ -505,6 +518,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
-
 </project>

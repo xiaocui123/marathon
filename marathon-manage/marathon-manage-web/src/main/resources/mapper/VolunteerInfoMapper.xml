@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.marathon.manage.refactor.mapper.VolunteerInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.marathon.manage.refactor.pojo.VolunteerInfo" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="marathon_id" property="marathonId" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" jdbcType="INTEGER" />
+    <result column="groupName" property="groupName" jdbcType="VARCHAR"/>
+    <result column="location_id" property="locationId" jdbcType="INTEGER" />
+    <result column="locationName" property="locationName" jdbcType="VARCHAR"/>
+    <result column="gender_require" property="genderRequire" jdbcType="INTEGER" />
+    <result column="total" property="total" jdbcType="INTEGER" />
+    <result column="job_require" property="jobRequire" jdbcType="VARCHAR" />
+    <result column="volunteer_require" property="volunteerRequire" jdbcType="VARCHAR" />
+    <result column="train_date" property="trainDate" jdbcType="TIMESTAMP" />
+    <result column="service_starttime" property="serviceStarttime" jdbcType="TIMESTAMP" />
+    <result column="service_endtime" property="serviceEndtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, marathon_id, group_id, location_id, gender_require, total, job_require, volunteer_require, 
+    train_date, service_starttime, service_endtime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.marathon.manage.refactor.pojo.VolunteerInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />,
+    groupName,
+    locationName
+    from volunteer_requirement
+    LEFT JOIN (
+      SELECT
+      id as groupId,
+      val as groupName
+      FROM
+      sys_t_dict dict
+    ) dict ON group_id = dict.groupId
+    LEFT JOIN (
+    SELECT
+      id as locationId,
+      val as locationName
+      FROM
+      sys_t_dict dict
+    ) dict2 ON location_id = dict2.locationId
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <insert id="insert" parameterType="com.marathon.manage.refactor.pojo.VolunteerInfo" >
+    insert into volunteer_requirement (id, marathon_id, group_id, 
+      location_id, gender_require, total, 
+      job_require, volunteer_require, train_date, 
+      service_starttime, service_endtime)
+    values (#{id,jdbcType=VARCHAR}, #{marathonId,jdbcType=VARCHAR}, #{groupId,jdbcType=INTEGER}, 
+      #{locationId,jdbcType=INTEGER}, #{genderRequire,jdbcType=INTEGER}, #{total,jdbcType=INTEGER}, 
+      #{jobRequire,jdbcType=VARCHAR}, #{volunteerRequire,jdbcType=VARCHAR}, #{trainDate,jdbcType=TIMESTAMP}, 
+      #{serviceStarttime,jdbcType=TIMESTAMP}, #{serviceEndtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.marathon.manage.refactor.pojo.VolunteerInfo" >
+    insert into volunteer_requirement
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="marathonId != null" >
+        marathon_id,
+      </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
+      <if test="locationId != null" >
+        location_id,
+      </if>
+      <if test="genderRequire != null" >
+        gender_require,
+      </if>
+      <if test="total != null" >
+        total,
+      </if>
+      <if test="jobRequire != null" >
+        job_require,
+      </if>
+      <if test="volunteerRequire != null" >
+        volunteer_require,
+      </if>
+      <if test="trainDate != null" >
+        train_date,
+      </if>
+      <if test="serviceStarttime != null" >
+        service_starttime,
+      </if>
+      <if test="serviceEndtime != null" >
+        service_endtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="marathonId != null" >
+        #{marathonId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="locationId != null" >
+        #{locationId,jdbcType=INTEGER},
+      </if>
+      <if test="genderRequire != null" >
+        #{genderRequire,jdbcType=INTEGER},
+      </if>
+      <if test="total != null" >
+        #{total,jdbcType=INTEGER},
+      </if>
+      <if test="jobRequire != null" >
+        #{jobRequire,jdbcType=VARCHAR},
+      </if>
+      <if test="volunteerRequire != null" >
+        #{volunteerRequire,jdbcType=VARCHAR},
+      </if>
+      <if test="trainDate != null" >
+        #{trainDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceStarttime != null" >
+        #{serviceStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceEndtime != null" >
+        #{serviceEndtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <delete id="deleteByMarathonId" parameterType="java.lang.String">
+    DELETE FROM volunteer_requirement WHERE marathon_id = #{marathonId,jdbcType=VARCHAR}
+  </delete>
+</mapper>

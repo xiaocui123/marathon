@@ -438,4 +438,9 @@
       activity_deleted = #{activityDeleted,jdbcType=TINYINT}
     where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
   </update>
+
+  <delete id="deleteByMarathonId" parameterType="java.lang.String" >
+    update marathon_activity ac set ac.activity_deleted = 1
+    where marathon_uuid = #{marathonUuid,jdbcType=VARCHAR}
+  </delete>
 </mapper>

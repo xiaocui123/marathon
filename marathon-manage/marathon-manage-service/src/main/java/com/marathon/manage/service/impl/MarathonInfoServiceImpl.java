@@ -7,19 +7,20 @@ import com.marathon.manage.pojo.ClassifyActivitysInfo;
 import com.marathon.manage.pojo.MarathonExtendInfo;
 import com.marathon.manage.pojo.MarathonInfo;
 import com.marathon.manage.refactor.mapper.MarathonActivityClassifyMapper;
+import com.marathon.manage.refactor.mapper.MarathonActivityInfoMapper;
+import com.marathon.manage.refactor.pojo.ClassifyModelCustomize;
 import com.marathon.manage.refactor.pojo.MarathonActivityClassify;
 import com.marathon.manage.refactor.pojo.MarathonActivityClassifyExample;
 import com.marathon.manage.refactor.pojo.MarathonActivityInfo;
 import com.marathon.manage.service.MarathonInfoService;
+import com.marathon.manage.utils.MarathonModelParser;
 import com.marathon.manage.vo.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by cui on 2017/5/16.
@@ -35,6 +36,9 @@ public class MarathonInfoServiceImpl implements MarathonInfoService {
     @Autowired
     private MarathonActivityClassifyMapper marathonActivityClassifyMapper;
 
+    @Autowired
+    private MarathonActivityInfoMapper marathonActivityInfoMapper;
+
     @Override
     public int addMarathon(MarathonInfo marathonInfo, List<String> lstMarathonClassify) {
         if (marathonInfo.getMarathonUuid() == null) {
@@ -42,13 +46,7 @@ public class MarathonInfoServiceImpl implements MarathonInfoService {
         }
         marathonInfoMapper.insertSelective(marathonInfo);
 
-        for (String marathonClassify : lstMarathonClassify) {
-            MarathonActivityClassify classify = new MarathonActivityClassify();
-            classify.setMarathonActivityclassifyUuid(UUID.randomUUID().toString());
-            classify.setMarathonId(marathonInfo.getMarathonUuid());
-            classify.setActivityclassify(marathonClassify);
-            marathonActivityClassifyMapper.insertSelective(classify);
-        }
+        initMarthonFromConfig(marathonInfo, lstMarathonClassify);
         return 0;
     }
 
@@ -58,12 +56,54 @@ public class MarathonInfoServiceImpl implements MarathonInfoService {
 
         marathonActivityClassifyMapper.deleteByMarathonId(marathonExtendInfo.getMarathonUuid());
 
-        for (String marathonClassify : marathonExtendInfo.getLstMarathonClassify()) {
-            MarathonActivityClassify classify = new MarathonActivityClassify();
-            classify.setMarathonActivityclassifyUuid(UUID.randomUUID().toString());
-            classify.setMarathonId(marathonExtendInfo.getMarathonUuid());
-            classify.setActivityclassify(marathonClassify);
-            marathonActivityClassifyMapper.insertSelective(classify);
+        marathonActivityInfoMapper.deleteByMarathonId(marathonExtendInfo.getMarathonUuid());
+
+        initMarthonFromConfig(marathonExtendInfo,marathonExtendInfo.getLstMarathonClassify());
+    }
+
+    /**
+     * 配置文件-初始化赛事活动
+     * @param marathonInfo
+     * @param lstMarathonClassify
+     */
+    private void initMarthonFromConfig(MarathonInfo marathonInfo, List<String> lstMarathonClassify) {
+        List<ClassifyModelCustomize> lstClassifyModel = MarathonModelParser.getClassifyModel();
+        for (String marathonClassify : lstMarathonClassify) {
+
+            ClassifyModelCustomize cmodel = null;
+            for (ClassifyModelCustomize classifyModel : lstClassifyModel) {
+                if (marathonClassify.equals(String.valueOf(classifyModel.getId()))) {
+                    cmodel = classifyModel;
+                    break;
+                }
+            }
+            if (cmodel != null) {
+                String classifyUUid= UUID.randomUUID().toString();
+
+                //先排下序
+                Collections.sort(cmodel.getLstActivity(), new Comparator<ClassifyModelCustomize.ActivityModelCustomize>() {
+                    @Override
+                    public int compare(ClassifyModelCustomize.ActivityModelCustomize o1, ClassifyModelCustomize.ActivityModelCustomize o2) {
+                        return o1.getSortNo().compareTo(o2.getSortNo());
+                    }
+                });
+                //初始化活动列表
+                for(ClassifyModelCustomize.ActivityModelCustomize activityModel:cmodel.getLstActivity()){
+                    MarathonActivityInfo activityInfo=new MarathonActivityInfo();
+                    activityInfo.setMarathonUuid(marathonInfo.getMarathonUuid());
+                    activityInfo.setActivityClassify(marathonClassify);
+                    activityInfo.setActivityName(activityModel.getName());
+                    activityInfo.setActivityUuid(UUID.randomUUID().toString());
+                    activityInfo.setActivityStatus("0");
+                    marathonActivityInfoMapper.insertSelective(activityInfo);
+                }
+                //初始化赛事和业务类别对应关系
+                MarathonActivityClassify classify = new MarathonActivityClassify();
+                classify.setMarathonActivityclassifyUuid(classifyUUid);
+                classify.setMarathonId(marathonInfo.getMarathonUuid());
+                classify.setActivityclassify(marathonClassify);
+                marathonActivityClassifyMapper.insertSelective(classify);
+            }
         }
     }
 

@@ -26,6 +26,15 @@ $(function () {
     $('#saveActivityBtn').click(function () {
         saveActivity();
     });
+
+    $('#_grid').treegrid({
+        onDblClickRow: function(row){
+            console.log(row);
+            var url=path + '/volunteer/init/d2880653-cd8b-405b-bcc9-28cccb1008b6';
+            $('#proscenium-box').load(url);
+        }
+    });
+
 });
 
 window.setTimeout(function () {
