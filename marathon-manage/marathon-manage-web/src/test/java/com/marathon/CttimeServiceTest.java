@@ -3,7 +3,8 @@
  */
 package com.marathon;
 
-import com.marathon.manage.config.ds.DataSourceAop;
+import com.marathon.manage.service.TimingResultService;
+import com.marathon.timing.TimingConstants;
 import com.marathon.timing.service.CttimeService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,17 @@ public class CttimeServiceTest extends AbstractSpringTest {
     @Autowired
     private CttimeService cttimeService;
 
+    @Autowired
+    private TimingResultService timingResultService;
+
+    @Test
+    public void testSaveExcel(){
+        cttimeService.saveResult2Excel();
+    }
+
     @Test
     public void testQuery(){
-        System.out.println(getBean(DataSourceAop.class));
-        System.out.println(cttimeService.query().size());
+        System.out.println(cttimeService.queryResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME));
     }
 
 }

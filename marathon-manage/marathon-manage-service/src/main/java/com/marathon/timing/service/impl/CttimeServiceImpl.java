@@ -3,16 +3,14 @@
  */
 package com.marathon.timing.service.impl;
 
+import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.marathon.manage.refactor.mapper.CttimesInfoMapper;
-import com.marathon.manage.refactor.mapper.PointsFLowMapper;
-import com.marathon.manage.refactor.mapper.RaceGunInfoMapper;
-import com.marathon.manage.refactor.mapper.RunnerInfoMapper;
+import com.marathon.manage.refactor.mapper.*;
 import com.marathon.manage.refactor.pojo.*;
 import com.marathon.timing.TimingConstants;
 import com.marathon.timing.excel.DataSet2ExcelSXSSFHelper;
@@ -26,10 +24,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author cui
@@ -51,6 +48,9 @@ public class CttimeServiceImpl implements CttimeService {
 
     @Autowired
     private RaceGunInfoMapper raceGunInfoMapper;
+
+    @Autowired
+    private TimingResultMapper timingResultMapper;
 
     @Override
     public List<PointsFLow> getPointFlow() {
@@ -85,11 +85,22 @@ public class CttimeServiceImpl implements CttimeService {
             }
         }
 
+        //便于查看，增加显示标准时间字段
+        boolean showBeijingTime = true;
+
+        //计算净成绩，并按净成绩排序
+        sortResult(lstFlow, lstResult);
+
         DataSet2ExcelSXSSFHelper helper = new DataSet2ExcelSXSSFHelper();
+        Map<String, String> beanPropertyColumnMap = buildMap(lstFlow, showBeijingTime);
 
-        Map<String, String> beanPropertyColumnMap = buildMap(lstFlow);
+        Map<String, IValueFormatter> valueFormatterMap = Maps.newHashMap();
+        if (showBeijingTime) {
+            valueFormatterMap = buildValueFormatterMap(lstFlow);
+        }
 
-        helper.export(workbook, "计时结果", beanPropertyColumnMap, Maps.<String, IValueFormatter>newHashMap(), lstResult);
+
+        helper.export(workbook, "计时结果", beanPropertyColumnMap, valueFormatterMap, lstResult);
 
         String fileName = "比赛结果" + TimingConstants.UNDERLINE + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + TimingConstants.EXCEL_EXT_XLSX;
 
@@ -101,6 +112,45 @@ public class CttimeServiceImpl implements CttimeService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 更新排名信息
+     *
+     * @param lstFlow
+     * @param lstResult
+     */
+    private void sortResult(List<PointsFLow> lstFlow, List<Map<String, Object>> lstResult) {
+
+        final String startKey = lstFlow.get(0).getPoints();
+
+        final String finishKey = lstFlow.get(lstFlow.size() - 1).getPoints();
+
+        for (Map<String, Object> objectMap : lstResult) {
+            Integer o1StartTime = (Integer) objectMap.get(startKey);
+            Integer o1finishTime = (Integer) objectMap.get(finishKey);
+
+            if (o1StartTime != null && o1finishTime != null) {
+                objectMap.put(TimingConstants.DEFAULT_RANK_KEY, o1finishTime - o1StartTime);
+            } else {
+                objectMap.put(TimingConstants.DEFAULT_RANK_KEY, null);
+            }
+        }
+
+        Collections.sort(lstResult, new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                Integer o1Rank = (Integer) o1.get(TimingConstants.DEFAULT_RANK_KEY);
+                Integer o2Rank = (Integer) o2.get(TimingConstants.DEFAULT_RANK_KEY);
+                if (o1Rank == null && o2Rank == null)
+                    return 0;
+                if (o1Rank == null)
+                    return 1;
+                if (o2Rank == null)
+                    return -1;
+                return o1Rank - o2Rank;
+            }
+        });
     }
 
     private RaceGunInfo getRaceGunInfo() {
@@ -118,13 +168,96 @@ public class CttimeServiceImpl implements CttimeService {
 
     }
 
-    private Map<String, String> buildMap(List<PointsFLow> lstFlow) {
+    /**
+     * 生成字段与属性对应关系
+     *
+     * @param lstFlow
+     * @param showBeijingTime：是否显示转换成北京时间，并添加到excel表头中
+     * @return
+     */
+    private Map<String, String> buildMap(List<PointsFLow> lstFlow, boolean showBeijingTime) {
         Map<String, String> columnMap = Maps.newLinkedHashMap();
         columnMap.put("Tag", "Tag");
         for (PointsFLow pointsFLow : lstFlow) {
             columnMap.put(pointsFLow.getPoints(), pointsFLow.getPoints());
+            if (showBeijingTime) {
+                columnMap.put(TimingConstants.BEIJINGTIME_COLUMN_PREFIX + pointsFLow.getPoints(), pointsFLow.getPoints());
+            }
         }
+        columnMap.put(TimingConstants.DEFAULT_RANK_KEY, TimingConstants.DEFAULT_RANK_KEY);
         return columnMap;
+    }
+
+    /**
+     * 显示数据格式转换器
+     *
+     * @param lstFlow
+     * @return
+     */
+    private Map<String, IValueFormatter> buildValueFormatterMap(List<PointsFLow> lstFlow) {
+
+        Map<String, IValueFormatter> valueFormatterMap = Maps.newHashMap();
+
+        IValueFormatter formatter = new IValueFormatter() {
+            @Override
+            public String format(Object object) {
+                if (object instanceof Integer) {
+                    try {
+                        Integer timeStamp = (Integer) object;
+                        long now = System.currentTimeMillis();
+                        SimpleDateFormat sdfOne = new SimpleDateFormat("yyyy-MM-dd");
+                        long unixZero = sdfOne.parse(sdfOne.format(now)).getTime();
+                        long copy = unixZero + timeStamp;
+                        SimpleDateFormat sdfTwo = new SimpleDateFormat("HH:mm:ss SSS");
+                        return sdfTwo.format(copy);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return null;
+            }
+        };
+
+        for (PointsFLow pointsFLow : lstFlow) {
+            String pointName = pointsFLow.getPoints();
+            String columnName = TimingConstants.BEIJINGTIME_COLUMN_PREFIX + pointName;
+            valueFormatterMap.put(columnName, formatter);
+        }
+
+        //计算净成绩
+        valueFormatterMap.put(TimingConstants.DEFAULT_RANK_KEY, formatter);
+
+        return valueFormatterMap;
+    }
+
+
+    @Override
+    public Map<String, Object> calcResult(RunnerInfo runner) {
+
+        List<PointsFLow> lstFlow = getPointFlow();
+        Preconditions.checkArgument(lstFlow.size() > 0, "流程未配置！");
+
+        RaceGunInfo raceGunInfo = getRaceGunInfo();
+        Preconditions.checkArgument(raceGunInfo != null, "发枪时间未配置！");
+
+        Map<String, Object> objectMap = calcRunnerRealTimePassLocation(runner, lstFlow, raceGunInfo);
+
+        return objectMap;
+
+    }
+
+    @Override
+    public List<String> getColumns() {
+        List<String> columns = Lists.newArrayList();
+        columns.addAll(Arrays.asList(TimingConstants.DEFAULT_RESULT_TABLE_COLUMNS));
+        List<PointsFLow> lstPoint = getPointFlow();
+        columns.addAll(Lists.transform(lstPoint, new Function<PointsFLow, String>() {
+            @Override
+            public String apply(PointsFLow pointsFLow) {
+                return pointsFLow.getPoints();
+            }
+        }));
+        return columns;
     }
 
     @Override
@@ -156,14 +289,14 @@ public class CttimeServiceImpl implements CttimeService {
             try {
                 if (points.getSeq() == 1) {
                     //处理始发点，要选择最后一次感应到的时间
-                    Integer time = getFirstLocationTime(lstTimes, points,false,dividingTime);
-                    if (time != null ) {
+                    Integer time = getFirstLocationTime(lstTimes, points, false, dividingTime);
+                    if (time != null) {
                         result.put(points.getPoints(), time);
                     }
                 } else if (points.getSeq() == pointsFLows.size()) {
                     //处理终点，将时间列表倒置
                     List<CttimesInfo> reversedLstTimes = Lists.reverse(lstTimes);
-                    Integer time = getFirstLocationTime(reversedLstTimes, points,true,dividingTime);
+                    Integer time = getFirstLocationTime(reversedLstTimes, points, true, dividingTime);
                     if (time != null && time > dividingTime) {
                         result.put(points.getPoints(), time);
                     }
@@ -197,13 +330,13 @@ public class CttimeServiceImpl implements CttimeService {
                 if (!isReverse) {
                     if (Integer.valueOf(time.getTime()) < dividingTime) {
                         result = time.getTime();
-                    }else{
+                    } else {
                         break;
                     }
-                }else{
+                } else {
                     if (Integer.valueOf(time.getTime()) > dividingTime) {
                         result = time.getTime();
-                    }else{
+                    } else {
                         break;
                     }
                 }
@@ -242,5 +375,10 @@ public class CttimeServiceImpl implements CttimeService {
             }
         }));
         return lstResult.size() > 0 ? Integer.valueOf(lstResult.get(0).getTime()) : null;
+    }
+
+    @Override
+    public List<Map<String, Object>> queryResult(String tableName) {
+        return timingResultMapper.selectTimingResult(tableName);
     }
 }

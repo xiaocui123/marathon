@@ -16,5 +16,13 @@ public interface TimingConstants {
 
     String UNDERLINE = "_";
 
-    Integer WORLD_RECORD_TIME = 123444;
+    String BEIJINGTIME_COLUMN_PREFIX = "TIME_";
+
+    String DEFAULT_RANK_KEY = "rank";
+
+    //计时结果表默认名称
+    String DEFAULT_RESULT_TABLE_NAME = "Result";
+
+    //计时结果表最少字段KEY
+    String[] DEFAULT_RESULT_TABLE_COLUMNS = {"Cat","Bib","NameChi","NameEng","Tag","Gender","Phone", "RankNet", "RankGun"};
 }

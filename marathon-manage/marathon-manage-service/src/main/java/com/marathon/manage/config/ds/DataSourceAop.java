@@ -11,7 +11,7 @@ public class DataSourceAop implements Ordered {
 
     private static final String PACKAGE_REFIX = "com.marathon.timing";
 
-    @Pointcut("execution(* com.marathon.timing..*Service.*(..))")
+    @Pointcut("execution(* com.marathon..*Service.*(..))")
     public void serviceAspect() {
     }
 
