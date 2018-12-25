@@ -37,8 +37,22 @@
 
     <!-- 1.表名取值${} -->
     <!-- 2.因为是未知列故返回结果不能再是对象, 此处使用map, 实际上返回的是list<map>, 如果表里有id等唯一值也可以 单纯返回map, key用ID -->
-    <select id="selectTimingResult" parameterType="map" resultType="java.util.Map">
+    <select id="selectTimingResult"  resultType="java.util.Map">
         select * from ${tableName}
+        <include refid="where_clause"/>
     </select>
 
+    <sql id="where_clause">
+        <where>
+            <if test="runnerInfo.bib != null and runnerInfo.bib != ''">
+                AND bib = #{runnerInfo.bib}
+            </if>
+            <if test="runnerInfo.nameeng != null and runnerInfo.nameeng != ''">
+                AND nameeng = #{runnerInfo.nameeng}
+            </if>
+            <if test="runnerInfo.tag != null and runnerInfo.tag != ''">
+                AND tag = #{runnerInfo.tag}
+            </if>
+        </where>
+    </sql>
 </mapper>

@@ -1,5 +1,6 @@
 package com.marathon.manage.service;
 
+import com.marathon.manage.refactor.pojo.RunnerInfo;
 import com.marathon.manage.vo.Page;
 
 import java.util.List;
@@ -38,5 +39,5 @@ public interface TimingResultService {
      */
     void saveResult(String tableName,  Map<String, String> params);
 
-    void queryForAll(Page<Map<String,Object>> qo);
+    Page<Map<String, Object>> queryForAll(RunnerInfo qo,int offset,int limit);
 }

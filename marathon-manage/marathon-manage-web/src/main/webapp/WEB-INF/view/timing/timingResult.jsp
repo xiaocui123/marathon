@@ -14,9 +14,40 @@
             <li class="active"><a href="#">计时结果</a></li>
         </ul>
     </div>
-    <div style="margin-top: 10px">
-        <button type="button" class="btn btn-default" id="marathon-add-btn">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>创建赛事</button>
+
+    <div class="row">
+        <form role="form" style="margin-top: 10px;">
+            <div class="input-group col-xs-12 clearfix mar-bottom">
+                <div class="col-xs-3">
+                    <div class="input-group form-group">
+                        <div class="input-group-addon">Bib</div>
+                        <input id="bib-input" type="text" class="form-control"
+                               name="bib" placeholder="Bit">
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="input-group form-group">
+                        <div class="input-group-addon">姓名</div>
+                        <input id="name-input" type="text" class="form-control"
+                               name="name" placeholder="姓名">
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="input-group form-group">
+                        <div class="input-group-addon">Tag</div>
+                        <input id="tag-input" type="text" class="form-control"
+                               name="tag" placeholder="Tag">
+                    </div>
+                </div>
+                <div class="col-xs-3 container-fluid">
+                    <div class="float-right">
+                        <button class="btn btn-primary" type="button" id="search-btn"
+                                name="queryBtn">查询</button>
+                        <button class="btn btn-info" type="button" onclick="clearSearch()">重置</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 
     <div class="row-fluid">

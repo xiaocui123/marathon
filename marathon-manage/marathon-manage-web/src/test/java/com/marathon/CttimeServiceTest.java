@@ -26,9 +26,4 @@ public class CttimeServiceTest extends AbstractSpringTest {
         cttimeService.saveResult2Excel();
     }
 
-    @Test
-    public void testQuery(){
-        System.out.println(cttimeService.queryResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME));
-    }
-
 }

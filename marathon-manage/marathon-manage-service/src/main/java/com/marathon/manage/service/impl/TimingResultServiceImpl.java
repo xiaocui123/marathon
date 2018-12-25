@@ -5,6 +5,7 @@ package com.marathon.manage.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.marathon.manage.refactor.mapper.TimingResultMapper;
+import com.marathon.manage.refactor.pojo.RunnerInfo;
 import com.marathon.manage.service.TimingResultService;
 import com.marathon.manage.vo.Page;
 import com.marathon.timing.TimingConstants;
@@ -45,11 +46,13 @@ public class TimingResultServiceImpl implements TimingResultService {
     }
 
     @Override
-    public void queryForAll(Page<Map<String, Object>> page) {
-        PageHelper.offsetPage(page.getOffset(), page.getLimit());
-        List<Map<String, Object>> lstResult = timingResultMapper.selectTimingResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME);
-        com.github.pagehelper.Page<Map<String,Object>> result = (com.github.pagehelper.Page<Map<String,Object>>) lstResult;
-        page.setTotal((int) result.getTotal());
-        page.setRows(result.getResult());
+    public Page<Map<String, Object>> queryForAll(RunnerInfo qo, int offset, int limit) {
+        Page<Map<String, Object>> resultPage = new Page<>();
+        PageHelper.offsetPage(offset, limit);
+        List<Map<String, Object>> lstResult = timingResultMapper.selectTimingResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME,qo);
+        com.github.pagehelper.Page<Map<String, Object>> result = (com.github.pagehelper.Page<Map<String, Object>>) lstResult;
+        resultPage.setTotal((int) result.getTotal());
+        resultPage.setRows(result.getResult());
+        return resultPage;
     }
 }

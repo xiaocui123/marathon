@@ -376,9 +376,4 @@ public class CttimeServiceImpl implements CttimeService {
         }));
         return lstResult.size() > 0 ? Integer.valueOf(lstResult.get(0).getTime()) : null;
     }
-
-    @Override
-    public List<Map<String, Object>> queryResult(String tableName) {
-        return timingResultMapper.selectTimingResult(tableName);
-    }
 }

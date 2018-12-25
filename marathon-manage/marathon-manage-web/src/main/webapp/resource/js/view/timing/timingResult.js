@@ -1,4 +1,9 @@
-$(function () {
+window.setTimeout(function() {
+    // 加载数据
+    query();
+});
+
+function query() {
     $.ajax({
         url: path + '/timing/getColumns',
         method: 'get',
@@ -45,8 +50,19 @@ $(function () {
     function queryParams(params) {
         var parameter = {
             limit: params.limit,
-            offset: params.offset
+            offset: params.offset,
+            bib : $.trim($("#bib-input") .val()),
+            nameeng : $.trim($("#name-input") .val()),
+            tag : $.trim($("#tag-input") .val())
         };
         return parameter;
-    }
-})
+    };
+
+    $("#search-btn").click(function () {
+
+        $('#grid').bootstrapTable('destroy');
+
+        query();
+
+    })
+}

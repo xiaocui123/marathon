@@ -5,6 +5,7 @@ package com.marathon.manage.controller;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
+import com.marathon.manage.qvo.TimingResultQO;
 import com.marathon.manage.refactor.pojo.RunnerInfo;
 import com.marathon.manage.service.TimingResultService;
 import com.marathon.manage.vo.Page;
@@ -82,8 +83,7 @@ public class TimingResultController {
 
     @RequestMapping("/queryAction")
     @ResponseBody
-    public Page<Map<String, Object>> queryAciton(HttpServletRequest request, @RequestBody Page<Map<String,Object>> qo) {
-        timingResultService.queryForAll(qo);
-        return qo;
+    public Page<Map<String, Object>> queryAciton(HttpServletRequest request, @RequestBody TimingResultQO qo) {
+        return timingResultService.queryForAll(qo,qo.getOffset(),qo.getLimit());
     }
 }

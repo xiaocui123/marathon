@@ -39,8 +39,6 @@ public interface CttimeService {
      */
     Map<String,Object> calcResult(RunnerInfo runner);
 
-    List<Map<String,Object>> queryResult(String tableName);
-
     /**
      * 获取动态列名称
      * @return

@@ -1,5 +1,6 @@
 package com.marathon.manage.refactor.mapper;
 
+import com.marathon.manage.refactor.pojo.RunnerInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -14,13 +15,8 @@ public interface TimingResultMapper {
     void createTimingResult(@Param("tableName") String tableName, @Param("cloums") List<String> cloums);
 
 
-    void saveResult(@Param("tableName") String tableName,@Param("params") Map<String, String> params);
+    void saveResult(@Param("tableName") String tableName, @Param("params") Map<String, String> params);
 
-    /**
-     * @Description: 单纯返回id作为key的map
-     * @MapKey("id") Map<Long   ,       Object> selectTaskResult(@Param("tableName")String tableName, @Param("startDate")Date startDate, @Param("endDate")Date endDate)
-     */
-
-    List<Map<String, Object>> selectTimingResult(@Param("tableName") String tableName);
+    List<Map<String, Object>> selectTimingResult(@Param("tableName") String tableName, @Param("runnerInfo") RunnerInfo runnerInfo);
 
 }
