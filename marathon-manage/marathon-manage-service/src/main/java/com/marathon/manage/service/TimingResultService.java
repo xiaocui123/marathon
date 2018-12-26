@@ -1,5 +1,6 @@
 package com.marathon.manage.service;
 
+import com.marathon.manage.refactor.pojo.PointsFLow;
 import com.marathon.manage.refactor.pojo.RunnerInfo;
 import com.marathon.manage.vo.Page;
 
@@ -40,4 +41,6 @@ public interface TimingResultService {
     void saveResult(String tableName,  Map<String, String> params);
 
     Page<Map<String, Object>> queryForAll(RunnerInfo qo,int offset,int limit);
+
+    List<Map<String,Object>> sortResult(List<PointsFLow> lstFlow, List<Map<String, Object>> lstResult);
 }

@@ -24,9 +24,7 @@ public class RunerServiceImpl implements RunnerService {
     private RunnerInfoMapper runnerInfoMapper;
 
     @Override
-    public List<RunnerInfo> queryAllRunners() {
-        RunnerInfoExample example = new RunnerInfoExample();
-        example.setOrderByClause(TimingConstants.RUNNER_ORDER_BY_KEY);
+    public List<RunnerInfo> queryRunners(RunnerInfoExample example) {
         List<RunnerInfo> lstRunner = runnerInfoMapper.selectByExample(example);
         return lstRunner;
     }

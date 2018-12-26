@@ -50,12 +50,13 @@ public class CttimeServiceImpl implements CttimeService {
     private RaceGunInfoMapper raceGunInfoMapper;
 
     @Autowired
-    private TimingResultMapper timingResultMapper;
+    private RaceCatMasterMapper raceCatMasterMapper;
 
     @Override
-    public List<PointsFLow> getPointFlow() {
+    public List<PointsFLow> getPointFlow(Integer courseId) {
+
         PointsFLowExample example = new PointsFLowExample();
-        example.or().andCourseidEqualTo(1);
+        example.or().andCourseidEqualTo(courseId);
         example.setOrderByClause(TimingConstants.POINTFLOW_ORDER_BY_KEY);
         return pointsFLowMapper.selectByExample(example);
     }
@@ -68,11 +69,11 @@ public class CttimeServiceImpl implements CttimeService {
         example.setOrderByClause(TimingConstants.RUNNER_ORDER_BY_KEY);
         List<RunnerInfo> lstRunner = runnerInfoMapper.selectByExample(example);
 
-        List<PointsFLow> lstFlow = getPointFlow();
-        Preconditions.checkArgument(lstFlow.size() > 0, "流程未配置！");
-
         RaceGunInfo raceGunInfo = getRaceGunInfo();
         Preconditions.checkArgument(raceGunInfo != null, "发枪时间未配置！");
+
+        //TODO 不同比赛类型的排序
+        List<PointsFLow> lstFlow = Lists.newArrayList();
 
         List<Map<String, Object>> lstResult = Lists.newArrayList();
 
@@ -87,6 +88,7 @@ public class CttimeServiceImpl implements CttimeService {
 
         //便于查看，增加显示标准时间字段
         boolean showBeijingTime = true;
+
 
         //计算净成绩，并按净成绩排序
         sortResult(lstFlow, lstResult);
@@ -232,15 +234,12 @@ public class CttimeServiceImpl implements CttimeService {
 
 
     @Override
-    public Map<String, Object> calcResult(RunnerInfo runner) {
-
-        List<PointsFLow> lstFlow = getPointFlow();
-        Preconditions.checkArgument(lstFlow.size() > 0, "流程未配置！");
+    public Map<String, Object> calcResult(RunnerInfo runner, List<PointsFLow> lstPointFlow) {
 
         RaceGunInfo raceGunInfo = getRaceGunInfo();
         Preconditions.checkArgument(raceGunInfo != null, "发枪时间未配置！");
 
-        Map<String, Object> objectMap = calcRunnerRealTimePassLocation(runner, lstFlow, raceGunInfo);
+        Map<String, Object> objectMap = calcRunnerRealTimePassLocation(runner, lstPointFlow, raceGunInfo);
 
         return objectMap;
 
@@ -250,7 +249,7 @@ public class CttimeServiceImpl implements CttimeService {
     public List<String> getColumns() {
         List<String> columns = Lists.newArrayList();
         columns.addAll(Arrays.asList(TimingConstants.DEFAULT_RESULT_TABLE_COLUMNS));
-        List<PointsFLow> lstPoint = getPointFlow();
+        List<PointsFLow> lstPoint = getMeasuredKeys();
         columns.addAll(Lists.transform(lstPoint, new Function<PointsFLow, String>() {
             @Override
             public String apply(PointsFLow pointsFLow) {
@@ -258,6 +257,18 @@ public class CttimeServiceImpl implements CttimeService {
             }
         }));
         return columns;
+    }
+
+    /**
+     * 结果表测量数据columns
+     *
+     * @return
+     */
+    private List<PointsFLow> getMeasuredKeys() {
+        PointsFLowExample example = new PointsFLowExample();
+        //默认courseid=0定义结果表中字段名字
+        example.or().andCourseidEqualTo(0);
+        return pointsFLowMapper.selectByExample(example);
     }
 
     @Override
@@ -303,7 +314,7 @@ public class CttimeServiceImpl implements CttimeService {
 
                 } else if (!Strings.isNullOrEmpty(points.getPriorpoint())) {
                     //这一点被通过多于一次，且不是第一次
-                    Integer time = getMutiPassLocationTime(lstTimes, points);
+                    Integer time = getMutiPassLocationTime(lstTimes, points, result);
                     if (time != null) {
                         result.put(points.getPoints(), time);
                     }
@@ -357,23 +368,36 @@ public class CttimeServiceImpl implements CttimeService {
         return lstResult.size() > 0 ? Integer.valueOf(lstResult.get(0).getTime()) : null;
     }
 
-    private Integer getMutiPassLocationTime(List<CttimesInfo> lstTimes, final PointsFLow points) {
-        PointsFLow priorpoint = new PointsFLow();
-        priorpoint.setPoints(points.getPriorpoint());
-        priorpoint.setDevice(points.getPriorpoint());
+    private Integer getMutiPassLocationTime(List<CttimesInfo> lstTimes, final PointsFLow points, Map<String, Object> result) {
 
-        //获取前一Location时间
-        final Integer priorpointFirstTime = getCommonLocationTime(lstTimes, priorpoint);
-        if (priorpointFirstTime == null) {
-            throw new IllegalArgumentException("runner 【" + lstTimes.get(0).getTag() + "】在点【" + priorpoint.getPoints() + "】处没有采集数据！");
+        String priorPoint = points.getPriorpoint();
+        final Integer priorTime = (Integer) result.get(priorPoint);
+        if (priorTime == null) {
+            throw new IllegalArgumentException("runner 【" + lstTimes.get(0).getTag() + "】在点【" + priorPoint + "】处没有采集数据！");
         }
-
         List<CttimesInfo> lstResult = Lists.newArrayList(Iterators.filter(lstTimes.iterator(), new Predicate<CttimesInfo>() {
             @Override
             public boolean apply(CttimesInfo cttimesInfo) {
-                return cttimesInfo.getLocation().equals(points.getDevice()) && Integer.valueOf(cttimesInfo.getTime()) > priorpointFirstTime;
+                return cttimesInfo.getLocation().equals(points.getDevice()) && Integer.valueOf(cttimesInfo.getTime()) > (priorTime + points.getInterval());
             }
         }));
         return lstResult.size() > 0 ? Integer.valueOf(lstResult.get(0).getTime()) : null;
+    }
+
+    @Override
+    public Map<Integer, List<String>> getCourseCats() {
+        Map<Integer, List<String>> courceCatsMap = Maps.newHashMap();
+        List<RaceCatMaster> lstRaceCat = raceCatMasterMapper.selectByExample(new RaceCatMasterExample());
+
+        for (RaceCatMaster raceCatMaster : lstRaceCat) {
+            Integer courceId = raceCatMaster.getCourseid();
+            if (courceCatsMap.get(courceId) == null) {
+                courceCatsMap.put(courceId, Lists.<String>newArrayList());
+            }
+            courceCatsMap.get(courceId).add(raceCatMaster.getRacecat());
+        }
+
+        return courceCatsMap;
+
     }
 }

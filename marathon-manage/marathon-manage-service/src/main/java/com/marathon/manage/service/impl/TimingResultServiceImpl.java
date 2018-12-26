@@ -5,6 +5,7 @@ package com.marathon.manage.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.marathon.manage.refactor.mapper.TimingResultMapper;
+import com.marathon.manage.refactor.pojo.PointsFLow;
 import com.marathon.manage.refactor.pojo.RunnerInfo;
 import com.marathon.manage.service.TimingResultService;
 import com.marathon.manage.vo.Page;
@@ -12,6 +13,8 @@ import com.marathon.timing.TimingConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -45,11 +48,72 @@ public class TimingResultServiceImpl implements TimingResultService {
         timingResultMapper.saveResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME, params);
     }
 
+
+    @Override
+    public List<Map<String, Object>> sortResult(List<PointsFLow> lstFlow, List<Map<String, Object>> lstResult) {
+
+        final String startKey = lstFlow.get(0).getPoints();
+
+        final String finishKey = lstFlow.get(lstFlow.size() - 1).getPoints();
+
+        Collections.sort(lstResult, new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                Integer o1FinishTime= (Integer) o1.get(finishKey);
+                Integer o2FinishTime= (Integer) o2.get(finishKey);
+                if (o1FinishTime == null && o2FinishTime == null)
+                    return 0;
+                if (o1FinishTime == null)
+                    return 1;
+                if (o2FinishTime == null)
+                    return -1;
+                return o1FinishTime - o2FinishTime;
+            }
+        });
+        //设置枪声排名信息
+        for (Map<String, Object> result : lstResult) {
+            result.put(TimingConstants.RANK_GUN, lstResult.indexOf(result) + 1);
+        }
+
+        Collections.sort(lstResult, new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                Integer o1Rank = null;
+                Integer o1StartTime = (Integer) o1.get(startKey);
+                Integer o1finishTime = (Integer) o1.get(finishKey);
+                if (o1StartTime != null && o1finishTime != null) {
+                    o1Rank = o1finishTime - o1StartTime;
+                }
+
+                Integer o2Rank = null;
+                Integer o2StartTime = (Integer) o2.get(startKey);
+                Integer o2finishTime = (Integer) o2.get(finishKey);
+                if (o2StartTime != null && o2finishTime != null) {
+                    o2Rank = o2finishTime - o2StartTime;
+                }
+                if (o1Rank == null && o2Rank == null)
+                    return 0;
+                if (o1Rank == null)
+                    return 1;
+                if (o2Rank == null)
+                    return -1;
+                return o1Rank - o2Rank;
+            }
+        });
+
+        //设置排名信息
+        for (Map<String, Object> result : lstResult) {
+            result.put(TimingConstants.RANK_CAT, lstResult.indexOf(result) + 1);
+        }
+
+        return lstResult;
+    }
+
     @Override
     public Page<Map<String, Object>> queryForAll(RunnerInfo qo, int offset, int limit) {
         Page<Map<String, Object>> resultPage = new Page<>();
         PageHelper.offsetPage(offset, limit);
-        List<Map<String, Object>> lstResult = timingResultMapper.selectTimingResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME,qo);
+        List<Map<String, Object>> lstResult = timingResultMapper.selectTimingResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME, qo);
         com.github.pagehelper.Page<Map<String, Object>> result = (com.github.pagehelper.Page<Map<String, Object>>) lstResult;
         resultPage.setTotal((int) result.getTotal());
         resultPage.setRows(result.getResult());

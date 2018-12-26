@@ -23,6 +23,12 @@ public interface TimingConstants {
     //计时结果表默认名称
     String DEFAULT_RESULT_TABLE_NAME = "Result";
 
+    //类别净排名
+    String RANK_CAT="RkCat";
+
+    //类别枪声排名
+    String RANK_GUN="RkGun";
+
     //计时结果表最少字段KEY
-    String[] DEFAULT_RESULT_TABLE_COLUMNS = {"Cat","Bib","NameChi","NameEng","Tag","Gender","Phone", "RankNet", "RankGun"};
+    String[] DEFAULT_RESULT_TABLE_COLUMNS = {"Cat","Bib","NameChi","NameEng","Tag","Gender","Phone", RANK_CAT, RANK_GUN};
 }

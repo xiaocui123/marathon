@@ -1,6 +1,7 @@
 package com.marathon.timing.service;
 
 import com.marathon.manage.refactor.pojo.RunnerInfo;
+import com.marathon.manage.refactor.pojo.RunnerInfoExample;
 
 import java.util.List;
 
@@ -10,6 +11,6 @@ import java.util.List;
  */
 public interface RunnerService {
 
-    List<RunnerInfo> queryAllRunners();
+    List<RunnerInfo> queryRunners(RunnerInfoExample example);
 
 }

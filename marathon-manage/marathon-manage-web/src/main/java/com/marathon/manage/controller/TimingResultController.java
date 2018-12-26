@@ -4,9 +4,12 @@
 package com.marathon.manage.controller;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.marathon.manage.qvo.TimingResultQO;
+import com.marathon.manage.refactor.pojo.PointsFLow;
 import com.marathon.manage.refactor.pojo.RunnerInfo;
+import com.marathon.manage.refactor.pojo.RunnerInfoExample;
 import com.marathon.manage.service.TimingResultService;
 import com.marathon.manage.vo.Page;
 import com.marathon.timing.TimingConstants;
@@ -61,26 +64,47 @@ public class TimingResultController {
         List<String> arrayColumn = cttimeService.getColumns();
         timingResultService.createTimingResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME, arrayColumn);
 
-        List<RunnerInfo> lstRunner = runnerService.queryAllRunners();
-        for (RunnerInfo runnerInfo : lstRunner) {
-            Map<String, Object> objectMap = cttimeService.calcResult(runnerInfo);
-            objectMap.put("Cat", runnerInfo.getCat());
-            objectMap.put("Bib", runnerInfo.getBib());
-            objectMap.put("NameChi", runnerInfo.getNamechi());
-            objectMap.put("NameEng", runnerInfo.getNameeng());
-            objectMap.put("Gender", runnerInfo.getGender());
-            objectMap.put("Phone", runnerInfo.getPhone());
+        //分比赛类型计算排名
+        Map<Integer,List<String>> courseCatMap=cttimeService.getCourseCats();
+        for (Map.Entry<Integer, List<String>> entry : courseCatMap.entrySet()) {
+            Integer courseID=entry.getKey();
 
-            Map<String, String> copyMap = Maps.transformValues(objectMap, new Function<Object, String>() {
-                @Override
-                public String apply(Object o) {
-                    return String.valueOf(o);
+            List<String> lstCat=entry.getValue();
+
+            List<PointsFLow> lstPointFlow=cttimeService.getPointFlow(courseID);
+
+            for(String cat:lstCat){
+                RunnerInfoExample example=new RunnerInfoExample();
+                example.or().andCatEqualTo(cat);
+                List<RunnerInfo> lstRunner = runnerService.queryRunners(example);
+
+                List<Map<String,Object>> lstRunnerResult= Lists.newArrayList();
+                for (RunnerInfo runnerInfo : lstRunner) {
+                    Map<String, Object> objectMap = cttimeService.calcResult(runnerInfo,lstPointFlow);
+                    objectMap.put("Cat", runnerInfo.getCat());
+                    objectMap.put("Bib", runnerInfo.getBib());
+                    objectMap.put("NameChi", runnerInfo.getNamechi());
+                    objectMap.put("NameEng", runnerInfo.getNameeng());
+                    objectMap.put("Gender", runnerInfo.getGender());
+                    objectMap.put("Phone", runnerInfo.getPhone());
+                    lstRunnerResult.add(objectMap);
                 }
-            });
-            timingResultService.saveResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME, copyMap);
-        }
-    }
 
+                List<Map<String,Object>> lstSortedResult=timingResultService.sortResult(lstPointFlow,lstRunnerResult);
+
+                for(Map<String,Object> result:lstSortedResult){
+                    Map<String, String> copyMap = Maps.transformValues(result, new Function<Object, String>() {
+                        @Override
+                        public String apply(Object o) {
+                            return String.valueOf(o);
+                        }
+                    });
+                    timingResultService.saveResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME, copyMap);
+                }
+            }
+        }
+
+    }
     @RequestMapping("/queryAction")
     @ResponseBody
     public Page<Map<String, Object>> queryAciton(HttpServletRequest request, @RequestBody TimingResultQO qo) {
