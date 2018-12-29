@@ -15,6 +15,8 @@ import com.marathon.manage.vo.Page;
 import com.marathon.timing.TimingConstants;
 import com.marathon.timing.service.CttimeService;
 import com.marathon.timing.service.RunnerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,6 +34,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("timing")
 public class TimingResultController {
+    private Logger logger=LoggerFactory.getLogger(getClass());
 
     @Autowired
     private CttimeService cttimeService;
@@ -80,11 +83,11 @@ public class TimingResultController {
 
                 List<Map<String,Object>> lstRunnerResult= Lists.newArrayList();
                 for (RunnerInfo runnerInfo : lstRunner) {
-                    Map<String, Object> objectMap = cttimeService.calcResult(runnerInfo,lstPointFlow);
+                    Map<String, Object> objectMap = cttimeService.calcResult(runnerInfo,lstPointFlow,courseID);
                     objectMap.put("Cat", runnerInfo.getCat());
                     objectMap.put("Bib", runnerInfo.getBib());
-                    objectMap.put("NameChi", runnerInfo.getNamechi());
-                    objectMap.put("NameEng", runnerInfo.getNameeng());
+//                    objectMap.put("NameChi", runnerInfo.getNamechi());
+//                    objectMap.put("NameEng", runnerInfo.getNameeng());
                     objectMap.put("Gender", runnerInfo.getGender());
                     objectMap.put("Phone", runnerInfo.getPhone());
                     lstRunnerResult.add(objectMap);
@@ -101,6 +104,7 @@ public class TimingResultController {
                     });
                     timingResultService.saveResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME, copyMap);
                 }
+                logger.info("**************Cat=【{}】计算跑者数量【{}】",cat,lstRunnerResult.size());
             }
         }
 

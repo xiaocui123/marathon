@@ -69,7 +69,8 @@ public class CttimeServiceImpl implements CttimeService {
         example.setOrderByClause(TimingConstants.RUNNER_ORDER_BY_KEY);
         List<RunnerInfo> lstRunner = runnerInfoMapper.selectByExample(example);
 
-        RaceGunInfo raceGunInfo = getRaceGunInfo();
+        Integer courseID = 1;
+        RaceGunInfo raceGunInfo = getRaceGunInfo(courseID);
         Preconditions.checkArgument(raceGunInfo != null, "发枪时间未配置！");
 
         //TODO 不同比赛类型的排序
@@ -155,15 +156,18 @@ public class CttimeServiceImpl implements CttimeService {
         });
     }
 
-    private RaceGunInfo getRaceGunInfo() {
+    private RaceGunInfo getRaceGunInfo(Integer courseID) {
 
-        List<RaceGunInfo> lstRaceInfo = raceGunInfoMapper.selectByExample(new RaceGunInfoExample());
+        RaceGunInfoExample example = new RaceGunInfoExample();
+        example.or().andRaceEqualTo(courseID);
+        List<RaceGunInfo> lstRaceInfo = raceGunInfoMapper.selectByExample(example);
 
         if (lstRaceInfo.size() > 0) {
             RaceGunInfo raceGunInfo = lstRaceInfo.get(0);
-            if (!Strings.isNullOrEmpty(raceGunInfo.getPlannedguntime()) && !Strings.isNullOrEmpty(raceGunInfo.getGuntime())) {
-                return raceGunInfo;
+            if (Strings.isNullOrEmpty(raceGunInfo.getGuntime())) {
+                raceGunInfo.setGuntime(raceGunInfo.getPlannedguntime());
             }
+            return raceGunInfo;
         }
 
         return null;
@@ -234,9 +238,9 @@ public class CttimeServiceImpl implements CttimeService {
 
 
     @Override
-    public Map<String, Object> calcResult(RunnerInfo runner, List<PointsFLow> lstPointFlow) {
+    public Map<String, Object> calcResult(RunnerInfo runner, List<PointsFLow> lstPointFlow, Integer courseID) {
 
-        RaceGunInfo raceGunInfo = getRaceGunInfo();
+        RaceGunInfo raceGunInfo = getRaceGunInfo(courseID);
         Preconditions.checkArgument(raceGunInfo != null, "发枪时间未配置！");
 
         Map<String, Object> objectMap = calcRunnerRealTimePassLocation(runner, lstPointFlow, raceGunInfo);
@@ -292,23 +296,19 @@ public class CttimeServiceImpl implements CttimeService {
             return result;
         }
 
-        //发枪时间
-        Integer dividingTime = Integer.valueOf(raceGunInfo.getGuntime()) + Integer.valueOf(raceGunInfo.getCutoffoffset());
-
         for (PointsFLow points : pointsFLows) {
 
             try {
                 if (points.getSeq() == 1) {
                     //处理始发点，要选择最后一次感应到的时间
-                    Integer time = getFirstLocationTime(lstTimes, points, false, dividingTime);
+                    Integer time = getSFLocationTime(lstTimes, points, true, raceGunInfo);
                     if (time != null) {
                         result.put(points.getPoints(), time);
                     }
                 } else if (points.getSeq() == pointsFLows.size()) {
-                    //处理终点，将时间列表倒置
-                    List<CttimesInfo> reversedLstTimes = Lists.reverse(lstTimes);
-                    Integer time = getFirstLocationTime(reversedLstTimes, points, true, dividingTime);
-                    if (time != null && time > dividingTime) {
+                    //处理终点
+                    Integer time = getSFLocationTime(lstTimes, points, false, raceGunInfo);
+                    if (time != null) {
                         result.put(points.getPoints(), time);
                     }
 
@@ -326,36 +326,46 @@ public class CttimeServiceImpl implements CttimeService {
                     }
                 }
             } catch (Exception e) {
-                logger.error("计算Location【{}】时间时出错,reason【{}】", points.getDevice(), e.getMessage());
+                logger.error("计算Location【{}】时间时出错", points.getDevice(), e);
             }
         }
         return result;
     }
 
 
-    private Integer getFirstLocationTime(List<CttimesInfo> lstTimes, PointsFLow points, boolean isReverse, Integer dividingTime) {
-        String result = "";
-        for (CttimesInfo time : lstTimes) {
-            if (time.getLocation().equals(points.getDevice())) {
-                //处理没有其他点数据的情况，起点数据和终点数据混在一起的情况
-                if (!isReverse) {
-                    if (Integer.valueOf(time.getTime()) < dividingTime) {
-                        result = time.getTime();
+    private Integer getSFLocationTime(List<CttimesInfo> lstTimes, final PointsFLow points, final boolean isFirst, final RaceGunInfo raceGunInfo) {
+        final Integer gunTime = Integer.valueOf(raceGunInfo.getGuntime());
+        final Integer cutoffTime = Integer.valueOf(raceGunInfo.getGuntime()) + Integer.valueOf(raceGunInfo.getCutoffoffset());
+        List<CttimesInfo> lstSFTimes = Lists.newArrayList(Iterators.filter(lstTimes.iterator(), new Predicate<CttimesInfo>() {
+            @Override
+            public boolean apply(CttimesInfo cttimesInfo) {
+                boolean flag = cttimesInfo.getLocation().equalsIgnoreCase(points.getDevice());
+                if (flag) {
+                    Integer cttime = Integer.valueOf(cttimesInfo.getTime());
+                    if (isFirst) {
+                        return cttime > gunTime && cttime < cutoffTime;
                     } else {
-                        break;
+                        return cttime > cutoffTime;
                     }
                 } else {
-                    if (Integer.valueOf(time.getTime()) > dividingTime) {
-                        result = time.getTime();
-                    } else {
-                        break;
-                    }
+                    return false;
                 }
-            } else {
-                break;
             }
+        }));
+
+        if (lstSFTimes.size() > 0) {
+            if (isFirst) {
+                final Integer startTime = Integer.valueOf(lstSFTimes.get(lstSFTimes.size() - 1).getTime());
+                //过滤时间列表
+                lstTimes.removeIf(cttime -> Integer.valueOf(cttime.getTime()) <= startTime);
+
+                return startTime;
+            } else {
+                return Integer.valueOf(lstSFTimes.get(0).getTime());
+            }
+        } else {
+            return null;
         }
-        return Integer.valueOf(result);
     }
 
     private Integer getCommonLocationTime(List<CttimesInfo> lstTimes, final PointsFLow points) {
@@ -365,7 +375,11 @@ public class CttimeServiceImpl implements CttimeService {
                 return cttimesInfo.getLocation().equals(points.getDevice());
             }
         }));
-        return lstResult.size() > 0 ? Integer.valueOf(lstResult.get(0).getTime()) : null;
+        Integer commonLocationTime = lstResult.size() > 0 ? Integer.valueOf(lstResult.get(0).getTime()) : null;
+        if (commonLocationTime != null) {
+            lstTimes.removeIf(cttime -> Integer.valueOf(cttime.getTime()) <= commonLocationTime);
+        }
+        return commonLocationTime;
     }
 
     private Integer getMutiPassLocationTime(List<CttimesInfo> lstTimes, final PointsFLow points, Map<String, Object> result) {
@@ -381,7 +395,12 @@ public class CttimeServiceImpl implements CttimeService {
                 return cttimesInfo.getLocation().equals(points.getDevice()) && Integer.valueOf(cttimesInfo.getTime()) > (priorTime + points.getInterval());
             }
         }));
-        return lstResult.size() > 0 ? Integer.valueOf(lstResult.get(0).getTime()) : null;
+
+        Integer locationTime = lstResult.size() > 0 ? Integer.valueOf(lstResult.get(0).getTime()) : null;
+        if (locationTime != null) {
+            lstTimes.removeIf(cttime -> Integer.valueOf(cttime.getTime()) <= locationTime);
+        }
+        return locationTime;
     }
 
     @Override

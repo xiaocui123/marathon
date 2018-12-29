@@ -36,7 +36,7 @@ public interface CttimeService {
     /**
      * 计算计时结果
      */
-    Map<String,Object> calcResult(RunnerInfo runner, List<PointsFLow> lstPointFlow);
+    Map<String,Object> calcResult(RunnerInfo runner, List<PointsFLow> lstPointFlow, Integer courseID);
 
     /**
      * 获取动态列名称
