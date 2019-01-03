@@ -1,3 +1,24 @@
+$(function () {
+    $.get(path + '/timing/queryAllCats',function(response){
+        if(response.status!='000'){
+            bootbox.alert("获取比赛组别信息失败!");
+        }else{
+            initCatSelect(response);
+        }
+    });
+    function initCatSelect(data) {
+        console.log(data);
+        var cats=data.object;
+        var html = '<option value="-1">请选择</option>';
+        for (var i = 0; i < cats.length; i++) {
+            html += '<option value="' + cats[i].racecat + '">' + cats[i].racecatnamechi + '</option>'
+        }
+        $('#cat_select').html(html);
+
+        $("#cat_select").val(-1);
+    }
+})
+
 window.setTimeout(function() {
     // 加载数据
     query();
@@ -53,7 +74,8 @@ function query() {
             offset: params.offset,
             bib : $.trim($("#bib-input") .val()),
             nameeng : $.trim($("#name-input") .val()),
-            tag : $.trim($("#tag-input") .val())
+            tag : $.trim($("#tag-input") .val()),
+            cat : $.trim($("#cat_select").val())
         };
         return parameter;
     };

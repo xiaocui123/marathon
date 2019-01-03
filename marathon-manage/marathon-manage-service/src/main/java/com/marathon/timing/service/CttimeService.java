@@ -1,6 +1,7 @@
 package com.marathon.timing.service;
 
 import com.marathon.manage.refactor.pojo.PointsFLow;
+import com.marathon.manage.refactor.pojo.RaceCatMaster;
 import com.marathon.manage.refactor.pojo.RaceGunInfo;
 import com.marathon.manage.refactor.pojo.RunnerInfo;
 
@@ -49,6 +50,8 @@ public interface CttimeService {
      * @return
      */
     Map<Integer,List<String>> getCourseCats();
+
+    List<RaceCatMaster> getRaceCatMaster();
 
 }
 

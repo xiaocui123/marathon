@@ -419,4 +419,9 @@ public class CttimeServiceImpl implements CttimeService {
         return courceCatsMap;
 
     }
+
+    @Override
+    public List<RaceCatMaster> getRaceCatMaster() {
+        return raceCatMasterMapper.selectByExample(new RaceCatMasterExample());
+    }
 }

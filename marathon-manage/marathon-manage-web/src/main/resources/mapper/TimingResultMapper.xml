@@ -53,6 +53,9 @@
             <if test="runnerInfo.tag != null and runnerInfo.tag != ''">
                 AND tag = #{runnerInfo.tag}
             </if>
+            <if test="runnerInfo.cat != null and runnerInfo.cat != '-1'">
+                AND cat = #{runnerInfo.cat}
+            </if>
         </where>
     </sql>
 </mapper>

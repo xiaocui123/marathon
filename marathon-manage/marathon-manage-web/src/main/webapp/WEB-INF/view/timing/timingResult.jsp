@@ -18,6 +18,13 @@
     <div class="row">
         <form role="form" style="margin-top: 10px;">
             <div class="input-group col-xs-12 clearfix mar-bottom">
+                <div class="col-xs-6">
+                    <div class="input-group form-group">
+                        <div class="input-group-addon">选择组别</div>
+                        <select class="form-control" id="cat_select">
+                        </select>
+                    </div>
+                </div>
                 <div class="col-xs-3">
                     <div class="input-group form-group">
                         <div class="input-group-addon">Bib</div>
@@ -32,6 +39,8 @@
                                name="name" placeholder="姓名">
                     </div>
                 </div>
+            </div>
+            <div class="input-group col-xs-12 clearfix mar-bottom">
                 <div class="col-xs-3">
                     <div class="input-group form-group">
                         <div class="input-group-addon">Tag</div>
