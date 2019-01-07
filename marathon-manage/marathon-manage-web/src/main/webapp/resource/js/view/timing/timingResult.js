@@ -75,7 +75,12 @@ function query() {
             {field: "gunScore", title: "枪声成绩", valign: 'middle'},
             {field: "cleanScore", title: "净成绩", valign: 'middle'},
             {field: "rkGun", title: "枪声名次", valign: 'middle'},
-            {field: "rkCat", title: "净名次", valign: 'middle'}
+            {field: "rkCat", title: "净名次", valign: 'middle'},
+            {field : 'tag',title : '操作',width : 200,align : 'center',
+                formatter : function(value, row, index) {
+                    return '<a href="javascript:;" name="detail" onclick="detail('+ row.tag+ ')">详细信息</a>&nbsp;&nbsp;';
+                }
+            }
         ]
     });
 
@@ -90,4 +95,31 @@ function query() {
         };
         return parameter;
     }
+}
+
+function detail(tag) {
+    $.get(path + '/timing/resultDetail/'+tag,function(response){
+        if(response.status!='000'){
+            bootbox.alert("获取结果详细信息出错!");
+        }else{
+            $('#result-detail-modal').find('tbody').empty();
+            $.each(response.object,function (index, resultDetail) {
+                var mark="";
+                if(resultDetail.mark){
+                    mark=resultDetail.mark;
+                }
+                var varable=' <tr>\n' +
+                    '            <td scope="row">'+resultDetail.location+'</td>\n' +
+                    '            <td>'+resultDetail.time+'</td>\n' +
+                    '            <td>'+resultDetail.formatTime+'</td>\n' +
+                    '            <td>'+resultDetail.lap+'</td>\n' +
+                    '            <td>'+resultDetail.reader+'</td>\n' +
+                    '            <td>'+mark+'</td>\n' +
+                    '</tr>'
+                $(varable).appendTo($('#result-detail-modal').find('tbody'));
+            });
+            $('#result-detail-modal').modal('show');
+        }
+    });
+
 }

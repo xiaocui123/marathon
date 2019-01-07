@@ -1,9 +1,6 @@
 package com.marathon.timing.service;
 
-import com.marathon.manage.refactor.pojo.PointsFLow;
-import com.marathon.manage.refactor.pojo.RaceCatMaster;
-import com.marathon.manage.refactor.pojo.RaceGunInfo;
-import com.marathon.manage.refactor.pojo.RunnerInfo;
+import com.marathon.manage.refactor.pojo.*;
 
 import java.util.List;
 import java.util.Map;
@@ -58,5 +55,12 @@ public interface CttimeService {
     List<RaceCatMaster> getRaceCatMaster();
 
     RaceGunInfo getRaceGunInfo(Integer courseID);
+
+    /**
+     * 获取Tag的所有比赛时间
+     * @param tag
+     * @return
+     */
+    List<CttimesInfo> getMeasuredRecordByTag(String tag);
 }
 

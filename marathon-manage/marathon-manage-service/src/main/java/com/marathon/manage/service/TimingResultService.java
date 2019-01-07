@@ -44,4 +44,11 @@ public interface TimingResultService {
     Page<TimingFinalResultType> queryForAll(RunnerInfo qo, int offset, int limit);
 
     List<Map<String,Object>> sortResult(List<PointsFLow> lstFlow, List<Map<String, Object>> lstResult);
+
+    /**
+     * 比赛结果
+     * @param tag
+     * @return
+     */
+    Map<String,Object> getResultByTag(String tag);
 }

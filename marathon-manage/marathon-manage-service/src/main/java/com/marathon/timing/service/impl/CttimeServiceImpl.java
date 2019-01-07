@@ -425,4 +425,13 @@ public class CttimeServiceImpl implements CttimeService {
     public List<RaceCatMaster> getRaceCatMaster() {
         return raceCatMasterMapper.selectByExample(new RaceCatMasterExample());
     }
+
+    @Override
+    public List<CttimesInfo> getMeasuredRecordByTag(String tag) {
+        //TODO 条件 时间大于实际开枪时间，减少无效数据
+        CttimesInfoExample example=new CttimesInfoExample();
+        example.or().andTagEqualTo(tag);
+        example.setOrderByClause(TimingConstants.CTTIME_ORDER_BY_KEY);
+        return cttimesInfoMapper.selectByExample(example);
+    }
 }

@@ -120,4 +120,15 @@ public class TimingResultServiceImpl implements TimingResultService {
         resultPage.setRows(result.getResult());
         return resultPage;
     }
+
+    @Override
+    public Map<String, Object> getResultByTag(String tag) {
+        RunnerInfo runnerInfo=new RunnerInfo();
+        runnerInfo.setTag(Integer.valueOf(tag));
+        List<Map<String,Object>> lstResult=timingResultMapper.selectTimingResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME,runnerInfo);
+        if(lstResult.size()==1){
+            return lstResult.get(0);
+        }
+        throw new IllegalArgumentException("未查询到Runner tag = 【"+tag+"】的结果");
+    }
 }

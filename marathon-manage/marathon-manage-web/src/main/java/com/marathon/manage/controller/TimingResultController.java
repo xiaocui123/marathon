@@ -7,6 +7,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.marathon.manage.qvo.ResultDetailVO;
 import com.marathon.manage.qvo.TimingResultQO;
 import com.marathon.manage.refactor.pojo.*;
 import com.marathon.manage.service.TimingResultService;
@@ -22,12 +23,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -100,13 +101,13 @@ public class TimingResultController {
                     objectMap.put("Gender", runnerInfo.getGender());
                     objectMap.put("Phone", runnerInfo.getPhone());
 
-                    Integer cleanScore=calcCleanScore(objectMap, lstPointFlow);
-                    if(cleanScore!=null){
+                    Integer cleanScore = calcCleanScore(objectMap, lstPointFlow);
+                    if (cleanScore != null) {
                         objectMap.put(TimingConstants.SCORE_CLEAN, cleanScore);
                     }
-                    Integer gunScore=calcGunScore(objectMap, lstPointFlow, courseID);
-                    if(gunScore!=null){
-                        objectMap.put(TimingConstants.SCORE_GUN,gunScore );
+                    Integer gunScore = calcGunScore(objectMap, lstPointFlow, courseID);
+                    if (gunScore != null) {
+                        objectMap.put(TimingConstants.SCORE_GUN, gunScore);
                     }
 
                     lstRunnerResult.add(objectMap);
@@ -203,5 +204,63 @@ public class TimingResultController {
                 resultt.setCleanScore(format.format(Integer.valueOf(resultt.getCleanScore())));
             }
         }
+    }
+
+
+    /**
+     * 获取结果的详细信息
+     *
+     * @param request
+     * @param tag
+     */
+    @RequestMapping("resultDetail/{tag}")
+    @ResponseBody
+    public BaseResultBean resultDetail(HttpServletRequest request, @PathVariable(value = "tag") String tag) {
+        SimpleResultBean<List<ResultDetailVO>> resultBean = new SimpleResultBean<>();
+        List<CttimesInfo> lstCttimeInfo = cttimeService.getMeasuredRecordByTag(tag);
+        Map<String, Object> result = timingResultService.getResultByTag(tag);
+
+        List<ResultDetailVO> lstResultDetail = Lists.transform(lstCttimeInfo, new Function<CttimesInfo, ResultDetailVO>() {
+            @Override
+            public ResultDetailVO apply(CttimesInfo cttimesInfo) {
+                ResultDetailVO vo = new ResultDetailVO();
+                vo.setTime(cttimesInfo.getTime());
+                vo.setReader(cttimesInfo.getReader());
+                vo.setLocation(cttimesInfo.getLocation());
+                vo.setLap(cttimesInfo.getLap());
+                try {
+                    long now = System.currentTimeMillis();
+                    SimpleDateFormat sdfOne = new SimpleDateFormat("yyyy-MM-dd");
+                    long unixZero = sdfOne.parse(sdfOne.format(now)).getTime();
+                    long copy = unixZero + Integer.valueOf(vo.getTime());
+                    SimpleDateFormat sdfTwo = new SimpleDateFormat("HH:mm:ss");
+                    vo.setFormatTime(sdfTwo.format(copy));
+                } catch (ParseException e) {
+                    logger.error("获取北京时间失败！", e);
+                }
+                return vo;
+            }
+        });
+
+        List<ResultDetailVO> clonedLstResultDetail=Lists.newArrayList();
+
+        //标识点位信息
+        for(ResultDetailVO resultDetail:lstResultDetail){
+            if(result.values().contains(resultDetail.getTime())){
+                Iterator entries = result.entrySet().iterator();
+                while (entries.hasNext()) {
+                    Map.Entry entry = (Map.Entry) entries.next();
+                    String key = (String)entry.getKey();
+                    String value = (String)entry.getValue();
+                    if(value.equalsIgnoreCase(resultDetail.getTime())){
+                        resultDetail.setMark(key);
+                        break;
+                    }
+                }
+            }
+            clonedLstResultDetail.add(resultDetail);
+        }
+        resultBean.setObject(clonedLstResultDetail);
+        return resultBean;
     }
 }

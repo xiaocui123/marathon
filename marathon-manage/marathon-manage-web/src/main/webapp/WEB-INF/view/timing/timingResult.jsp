@@ -63,31 +63,51 @@
         <table id="grid"></table>
     </div>
     <!-- 添加通讯录模态框 -->
-    <div class="modal" id="create-marathon-modal" style="overflow-y: auto;">
+    <div class="modal" id="result-detail-modal" style="overflow-y: auto;">
         <div class="modal-dialog"
              style="width: 70%; background: #fff; margin: 30px auto;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                             class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="modal-title">新建赛事</h4>
+                    <h4 class="modal-title" id="modal-title">详细信息</h4>
                 </div>
                 <div class="modal-body">
-                    <!-- 第一行 -->
-                    <div class="input-group col-xs-12" clearfix>
-                        <div class="col-xs-12">
-                            <div class="input-group form-group">
-                                <div class="input-group-addon">赛事名称</div>
-                                <input id="marathon-name-input" type="text" class="form-control" placeholder="赛事名称">
-                            </div>
-                        </div>
-                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Location</th>
+                                <th scope="col">时间</th>
+                                <th scope="col">北京时间</th>
+                                <th scope="col">Lap</th>
+                                <th scope="col">Reader</th>
+                                <th scope="col">Mark</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>@mdo</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Larry</td>
+                                <td>the Bird</td>
+                                <td>@twitter</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
                 </div>
                 <div class="modal-footer" id="edit-footer">
-                    <button type="button" class="btn btn-primary text-center"
-                            id="saveMarathonBtn">保存
-                    </button>
                     <button type="button" class="btn btn-default" data-dismiss="modal" id="analySub">关闭</button>
                 </div>
             </div>
