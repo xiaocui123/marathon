@@ -2,6 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.marathon.manage.refactor.mapper.TimingResultMapper">
 
+    <resultMap id="timingFinalResultMap" type="com.marathon.manage.refactor.pojo.TimingFinalResultType">
+        <id column="Tag" property="tag" jdbcType="VARCHAR" />
+        <result column="NameChi" property="runnerName" jdbcType="VARCHAR" />
+        <result column="Bib" property="bib" jdbcType="VARCHAR" />
+        <result column="Gender" property="gender" jdbcType="VARCHAR" />
+        <result column="Cat" property="cat" jdbcType="VARCHAR" />
+        <result column="ScoreGun" property="gunScore" jdbcType="VARCHAR" />
+        <result column="ScoreClean" property="cleanScore" jdbcType="VARCHAR" />
+        <result column="RkGun" property="rkGun" jdbcType="INTEGER" />
+        <result column="RkCat" property="rkCat" jdbcType="INTEGER" />
+    </resultMap>
+
     <select id="existTable" parameterType="String" resultType="Integer">
 		SELECT
 	      count(1)
@@ -42,18 +54,25 @@
         <include refid="where_clause"/>
     </select>
 
+    <select id="selectTimingFinalResult" resultMap="timingFinalResultMap">
+        select Tag,NameChi,Bib,Gender,Cat,ScoreGun,ScoreClean,RkGun,RkCat
+        FROM ${tableName}
+        <include refid="where_clause"/>
+        order by cat,ABS(RkGun)
+    </select>
+
     <sql id="where_clause">
         <where>
             <if test="runnerInfo.bib != null and runnerInfo.bib != ''">
                 AND bib = #{runnerInfo.bib}
             </if>
-            <if test="runnerInfo.nameeng != null and runnerInfo.nameeng != ''">
-                AND nameeng = #{runnerInfo.nameeng}
+            <if test="runnerInfo.namechi != null and runnerInfo.namechi != ''">
+                AND NameChi = #{runnerInfo.namechi}
             </if>
             <if test="runnerInfo.tag != null and runnerInfo.tag != ''">
                 AND tag = #{runnerInfo.tag}
             </if>
-            <if test="runnerInfo.cat != null and runnerInfo.cat != '-1'">
+            <if test="runnerInfo.cat != null and runnerInfo.cat != '-1' and runnerInfo.cat !=''">
                 AND cat = #{runnerInfo.cat}
             </if>
         </where>

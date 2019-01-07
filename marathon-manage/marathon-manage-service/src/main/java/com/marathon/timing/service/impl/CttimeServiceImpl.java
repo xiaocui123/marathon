@@ -156,7 +156,8 @@ public class CttimeServiceImpl implements CttimeService {
         });
     }
 
-    private RaceGunInfo getRaceGunInfo(Integer courseID) {
+    @Override
+    public  RaceGunInfo getRaceGunInfo(Integer courseID) {
 
         RaceGunInfoExample example = new RaceGunInfoExample();
         example.or().andRaceEqualTo(courseID);

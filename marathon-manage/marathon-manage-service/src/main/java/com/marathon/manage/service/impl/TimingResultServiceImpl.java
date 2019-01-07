@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.marathon.manage.refactor.mapper.TimingResultMapper;
 import com.marathon.manage.refactor.pojo.PointsFLow;
 import com.marathon.manage.refactor.pojo.RunnerInfo;
+import com.marathon.manage.refactor.pojo.TimingFinalResultType;
 import com.marathon.manage.service.TimingResultService;
 import com.marathon.manage.vo.Page;
 import com.marathon.timing.TimingConstants;
@@ -59,8 +60,8 @@ public class TimingResultServiceImpl implements TimingResultService {
         Collections.sort(lstResult, new Comparator<Map<String, Object>>() {
             @Override
             public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-                Integer o1FinishTime= (Integer) o1.get(finishKey);
-                Integer o2FinishTime= (Integer) o2.get(finishKey);
+                Integer o1FinishTime = (Integer) o1.get(finishKey);
+                Integer o2FinishTime = (Integer) o2.get(finishKey);
                 if (o1FinishTime == null && o2FinishTime == null)
                     return 0;
                 if (o1FinishTime == null)
@@ -110,11 +111,11 @@ public class TimingResultServiceImpl implements TimingResultService {
     }
 
     @Override
-    public Page<Map<String, Object>> queryForAll(RunnerInfo qo, int offset, int limit) {
-        Page<Map<String, Object>> resultPage = new Page<>();
+    public Page<TimingFinalResultType> queryForAll(RunnerInfo qo, int offset, int limit) {
+        Page<TimingFinalResultType> resultPage = new Page<>();
         PageHelper.offsetPage(offset, limit);
-        List<Map<String, Object>> lstResult = timingResultMapper.selectTimingResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME, qo);
-        com.github.pagehelper.Page<Map<String, Object>> result = (com.github.pagehelper.Page<Map<String, Object>>) lstResult;
+        List<TimingFinalResultType> lstResult = timingResultMapper.selectTimingFinalResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME, qo);
+        com.github.pagehelper.Page<TimingFinalResultType> result = (com.github.pagehelper.Page<TimingFinalResultType>) lstResult;
         resultPage.setTotal((int) result.getTotal());
         resultPage.setRows(result.getResult());
         return resultPage;

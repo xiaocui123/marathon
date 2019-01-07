@@ -1,6 +1,7 @@
 package com.marathon.manage.refactor.mapper;
 
 import com.marathon.manage.refactor.pojo.RunnerInfo;
+import com.marathon.manage.refactor.pojo.TimingFinalResultType;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -18,5 +19,7 @@ public interface TimingResultMapper {
     void saveResult(@Param("tableName") String tableName, @Param("params") Map<String, String> params);
 
     List<Map<String, Object>> selectTimingResult(@Param("tableName") String tableName, @Param("runnerInfo") RunnerInfo runnerInfo);
+
+    List<TimingFinalResultType> selectTimingFinalResult(@Param("tableName") String tableName, @Param("runnerInfo") RunnerInfo runnerInfo);
 
 }
